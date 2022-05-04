@@ -1,0 +1,71 @@
+package ${package.Controller};
+
+
+import io.swagger.annotations.*;
+import java.util.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.web.bind.annotation.*;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+* @author ${author}
+* @since ${date}
+*/
+@Api(tags = {"$!{table.comment}"})
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappinCSTyphenStyle})${controllerMappinCSTyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+    #if(${superControllerClass})
+    public class ${table.controllerName} extends ${superControllerClass} {
+    #else
+
+    public class ${table.controllerName} {
+
+    @Autowired
+    private ${table.serviceName} targetService;
+
+
+    @PostMapping("/saveOrUpdate")
+    @ApiOperation("新建或编辑")
+    @ResultObjectAnnotation(value=DmlTypeConstant.INSERT,successMessage = "新建或编辑成功!",errorMessage = "新建或编辑失败!")
+    public Object saveOrUpdate(@RequestBody ${entity} ${entity}) {
+    return targetService.saveOrUpdate( ${entity});
+    }
+
+
+    @GetMapping("/getById/{id}")
+    @ApiOperation("查看")
+    @ResultObjectAnnotation(DmlTypeConstant.SELECT)
+    public Object getById(@PathVariable String id) {
+    return targetService.getById(id);
+    }
+
+
+    @DeleteMapping("/delete/{ids}")
+    @ApiOperation("删除")
+    @ResultObjectAnnotation(DmlTypeConstant.DELETE)
+    public Object delete(@PathVariable List
+    <String> ids) {
+      return targetService.removeByIds(ids);
+      }
+
+
+    #end
+
+}
+
+#end

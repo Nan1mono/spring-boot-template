@@ -1,0 +1,21 @@
+server:
+  port: 8250
+
+# datasource
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    dataSource1:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3307/test1?useSSL=false&serverTimezone=UTC
+      username: root
+      password: 123456
+    dataSource2:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3307/test2?useSSL=false&serverTimezone=UTC
+      username: root
+      password: 123456
+      
+# mybatis-plus
+#mybatis-plus:
+#  mapper-locations: classpath:mapper/*Mapper.xml
