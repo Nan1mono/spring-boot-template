@@ -1,4 +1,4 @@
-package com.template.project.common.aop;
+package com.template.project.common.annotation;
 
 import java.lang.annotation.*;
 

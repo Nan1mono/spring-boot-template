@@ -1,4 +1,4 @@
-package com.template.project.mapper.test2;
+package com.template.project.mapper.dataSource2;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.template.project.model.entity.User;

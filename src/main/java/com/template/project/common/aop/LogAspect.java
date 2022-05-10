@@ -1,6 +1,7 @@
 package com.template.project.common.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.template.project.common.annotation.LogAnnotation;
 import com.template.project.common.utils.HttpContextUtils;
 import com.template.project.common.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ import java.lang.reflect.Method;
 public class LogAspect {
 
     // 配置切点类 拥有这个注解的都会被AOP增强
-    @Pointcut("@annotation(com.template.project.common.aop.LogAnnotation)")
+    @Pointcut("@annotation(com.template.project.common.annotation.LogAnnotation)")
     public void point(){
 
     }

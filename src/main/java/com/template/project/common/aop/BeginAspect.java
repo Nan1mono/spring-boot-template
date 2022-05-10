@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class BeginAspect {
     // 配置切点类
     // 配置切点类 拥有这个注解的都会被AOP增强
-    @Pointcut("@annotation(com.template.project.common.aop.BeginAnnotation)")
+    @Pointcut("@annotation(com.template.project.common.annotation.BeginAnnotation)")
     public void point(){
         
     }

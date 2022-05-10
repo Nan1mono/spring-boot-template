@@ -4,6 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
+/**
+ * MD5加密工具
+ */
 public final class MD5 {
 
     public static String encrypt(String strSrc) {

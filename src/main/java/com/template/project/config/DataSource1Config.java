@@ -16,7 +16,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "com.template.project.mapper.test1",
+@MapperScan(basePackages = "com.template.project.mapper.dataSource1",
         sqlSessionFactoryRef="SessionFactory1")
 public class DataSource1Config {
     @Bean
@@ -35,7 +35,7 @@ public class DataSource1Config {
 //        sessionFactory.setDataSource(dataSource1());
         sessionFactory.setDataSource(dataSource);
         // 指定主库对应的mapper.xml文件
-        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/test1/*.xml"));
+        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/dataSource1/*.xml"));
         return sessionFactory.getObject();
     }
 }
