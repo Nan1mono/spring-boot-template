@@ -11,8 +11,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     
-    <groupId>com.ck.hms</groupId>
-    <artifactId>hms</artifactId>
+    <groupId>com.template.project</groupId>
+    <artifactId>project</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- 版本控制 -->

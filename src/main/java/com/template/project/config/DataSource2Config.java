@@ -1,10 +1,15 @@
 package com.template.project.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +22,10 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(basePackages = "com.template.project.mapper.dataSource2", sqlSessionFactoryRef = "SessionFactory2")
 public class DataSource2Config {
+
+    @Autowired
+    private MybatisPlusInterceptor mybatisPlusInterceptor;
+    
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.datasource2")
     public DataSource dataSource2() {
@@ -34,6 +43,13 @@ public class DataSource2Config {
         sessionFactory.setDataSource(dataSource);
         // 指定主库对应的mapper.xml文件
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/dataSource2/*.xml"));
+        // 集成分页插件
+        Interceptor[] intercepts = {mybatisPlusInterceptor};
+        sessionFactory.setPlugins(intercepts);
+        // 添加sql控制台打印
+        MybatisConfiguration mybatisConfiguration = new MybatisConfiguration();
+        mybatisConfiguration.setLogImpl(StdOutImpl.class);
+        sessionFactory.setConfiguration(mybatisConfiguration);
         return sessionFactory.getObject();
     }
 }

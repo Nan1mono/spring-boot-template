@@ -38,7 +38,7 @@ public class MyException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "ArchivesException{" +
+        return "MyException{" +
                 "code=" + code +
                 ", message=" + this.getMessage() +
                 '}';

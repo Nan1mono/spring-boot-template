@@ -15,7 +15,3 @@ spring:
       url: jdbc:mysql://localhost:3307/test2?useSSL=false&serverTimezone=UTC
       username: root
       password: 123456
-      
-# mybatis-plus
-#mybatis-plus:
-#  mapper-locations: classpath:mapper/*Mapper.xml

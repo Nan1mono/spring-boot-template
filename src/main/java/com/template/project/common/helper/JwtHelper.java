@@ -34,6 +34,7 @@ public class JwtHelper {
                 .compact();
         return token;
     }
+    
     public static Object getUserId(String token) {
         if(StringUtils.isEmpty(token)) return null;
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);
@@ -41,6 +42,7 @@ public class JwtHelper {
         Object userId = claims.get("userId");
         return userId;
     }
+    
     public static Object getUserName(String token) {
         if(StringUtils.isEmpty(token)) return "";
         Jws<Claims> claimsJws
