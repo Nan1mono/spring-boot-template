@@ -2,6 +2,7 @@ package com.template.project.controller;
 
 import com.template.project.common.result.Result;
 import com.template.project.common.utils.MailUtils;
+import com.template.project.model.bo.MailRecord;
 import com.template.project.model.entity.Person;
 import com.template.project.model.entity.User;
 import com.template.project.service.PersonService;
@@ -45,8 +46,9 @@ public class TestController {
     }
     
     @GetMapping("/send2/{email}")
-    public void send2(@PathVariable String email){
-        mailUtils.send(email);
+    public String send2(@PathVariable String email){
+        MailRecord mailRecord = mailUtils.send(email);
+        return mailRecord.getTo();
     }
     
 }

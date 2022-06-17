@@ -1,24 +1,3 @@
-server:
-  port: 8250
-
-# datasource
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    dataSource1:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3307/test1?useSSL=false&serverTimezone=UTC
-      username: root
-      password: 123456
-    dataSource2:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3307/test2?useSSL=false&serverTimezone=UTC
-      username: root
-      password: 123456
-      
-  mail:
-    username: 1174752357@qq.com
-    password: qxpnolhjayulhhif
-    host: smtp.qq.com
-    default-encoding: UTF-8
-    port: 587
+  profiles:
+    active: dev

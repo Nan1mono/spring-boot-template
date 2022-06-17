@@ -10,12 +10,12 @@
         <version>2.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    
+
     <groupId>com.template.project</groupId>
     <artifactId>project</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- 版本控制 -->
+    <!-- 环境控制 -->
     <properties>
         <java.version>1.8</java.version>
         <mybatis-plus.version>3.4.3</mybatis-plus.version>
@@ -54,7 +54,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-<!--            <version>5.1.47</version>-->
+            <!--            <version>5.1.47</version>-->
             <version>${mysql-connector.version}</version>
         </dependency>
 
@@ -192,5 +192,58 @@
         </dependency>
 
     </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>pro</id>
+            <properties>
+                <profileActive>pro</profileActive>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
+
+    <build>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <excludes>
+                <exclude>application.yml</exclude>
+                <exclude>application-dev.yml</exclude>
+                <exclude>application-pro.yml</exclude>
+            </excludes>
+        </resource>
+
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>application-dev.yml</include>
+                <include>application-pro.yml</include>
+                <include>application.yml</include>
+            </includes>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+
+
+    <plugins>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+
+            <configuration>
+                <delimiters>@</delimiters>
+                <encoding>utf-8</encoding>
+                <useDefaultDelimiters>false</useDefaultDelimiters>
+            </configuration>
+        </plugin>
+
+    </plugins>
+    </build>
 
 </project>
