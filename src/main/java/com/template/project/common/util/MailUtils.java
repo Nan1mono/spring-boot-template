@@ -1,10 +1,9 @@
-package com.template.project.common.utils;
+package com.template.project.common.util;
 
 
 import com.template.project.common.exception.MyException;
 import com.template.project.common.result.ResultCodeEnum;
 import com.template.project.model.bo.MailRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

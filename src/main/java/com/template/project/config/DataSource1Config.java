@@ -17,17 +17,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
 @Configuration
 @MapperScan(basePackages = "com.template.project.mapper.dataSource1",
-        sqlSessionFactoryRef="SessionFactory1")
+        sqlSessionFactoryRef = "SessionFactory1")
 public class DataSource1Config {
-    
+
     @Autowired
     private MybatisPlusInterceptor mybatisPlusInterceptor;
-    
+
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.datasource1")
     public DataSource dataSource1() {
@@ -53,5 +54,12 @@ public class DataSource1Config {
         mybatisConfiguration.setLogImpl(StdOutImpl.class);
         sessionFactory.setConfiguration(mybatisConfiguration);
         return sessionFactory.getObject();
+    }
+
+    @Bean
+    public DataSourceTransactionManager transactionManager1() {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource1());
+        return dataSourceTransactionManager;
     }
 }

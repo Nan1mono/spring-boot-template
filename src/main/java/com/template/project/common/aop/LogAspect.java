@@ -2,8 +2,8 @@ package com.template.project.common.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.template.project.common.annotation.LogAnnotation;
-import com.template.project.common.utils.HttpContextUtils;
-import com.template.project.common.utils.IpUtils;
+import com.template.project.common.util.HttpContextUtils;
+import com.template.project.common.util.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

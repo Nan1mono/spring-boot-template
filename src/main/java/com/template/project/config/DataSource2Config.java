@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -51,5 +52,12 @@ public class DataSource2Config {
         mybatisConfiguration.setLogImpl(StdOutImpl.class);
         sessionFactory.setConfiguration(mybatisConfiguration);
         return sessionFactory.getObject();
+    }
+
+    @Bean
+    public DataSourceTransactionManager transactionManager2() {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource2());
+        return dataSourceTransactionManager;
     }
 }

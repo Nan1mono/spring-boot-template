@@ -1,4 +1,4 @@
-package com.template.project.common.utils;
+package com.template.project.common.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

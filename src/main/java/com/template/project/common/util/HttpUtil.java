@@ -1,4 +1,4 @@
-package com.template.project.common.utils;
+package com.template.project.common.util;
 
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
