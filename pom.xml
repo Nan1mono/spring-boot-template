@@ -11,19 +11,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.template.project</groupId>
-    <artifactId>project</artifactId>
+    <groupId>com.project.template</groupId>
+    <artifactId>template</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- 环境控制 -->
     <properties>
         <java.version>1.8</java.version>
-        <mybatis-plus.version>3.4.3</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.4.0</mybatis-plus-generator.version>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
         <velocity-engine.version>2.3</velocity-engine.version>
         <mysql-connector.version>8.0.12</mysql-connector.version>
-        <!-- 如果是mysql 5.7版本需要切到到5.1.47 -->
-        <!--<mysql-connector.version>5.1.47</mysql-connector.version>-->
         <alibaba-druid.version>1.1.22</alibaba-druid.version>
         <alibaba-fastjson.version>1.2.76</alibaba-fastjson.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
@@ -117,6 +115,7 @@
             <version>${alibaba-fastjson.version}</version>
         </dependency>
 
+        <!-- yml or properties metadata processor 配置文件快捷提示 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -154,11 +153,13 @@
             <version>${commons-collections.version}</version>
         </dependency>
 
+        <!-- slf4j日志记录 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
+        <!-- redis场景 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -231,7 +232,6 @@
 
 
     <plugins>
-
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
@@ -247,7 +247,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
         </plugin>
-
     </plugins>
     </build>
 
