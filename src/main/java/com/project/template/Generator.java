@@ -52,9 +52,7 @@ public class Generator {
                         .superClass(BaseEntity.class)
                         .addSuperEntityColumns(
                                 "is_delete",
-                                "create_by",
                                 "create_on",
-                                "update_by",
                                 "update_on")
                         .enableTableFieldAnnotation()
                         .mapperBuilder()

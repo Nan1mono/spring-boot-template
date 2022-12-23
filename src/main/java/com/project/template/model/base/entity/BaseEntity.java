@@ -33,14 +33,6 @@ public class BaseEntity implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateOn;
 
-    @ApiModelProperty(value = "创建者")
-    @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
-
-    @ApiModelProperty(value = "更新者")
-    @TableField(fill = FieldFill.UPDATE)
-    private Long updateBy;
-
     @ApiModelProperty(value = "其他参数")
     @TableField(exist = false)
     @ExcelIgnore
