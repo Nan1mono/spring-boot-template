@@ -11,8 +11,8 @@ public class GlobalExceptionHandler {
 
     /**
      * 拦截所有java可产生异常并进行统一处理
-     * @param e
-     * @return
+     * @param e 捕获指定异常
+     * @return Result<Void> 统一异常信息
      */
     @ExceptionHandler(Exception.class)
     public Result<Void> error(Exception e){
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     /**
      * 拦截所有自定义异常
      * @param myException 自定义异常
-     * @return
+     * @return Result<Void> 统一异常信息
      */
     @ExceptionHandler(MyException.class)
     public Result<Void> error(MyException myException){
