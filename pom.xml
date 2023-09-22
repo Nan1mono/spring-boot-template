@@ -19,7 +19,7 @@
     <properties>
         <java.version>11</java.version>
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
+        <mybatis-plus-generator.version>3.5.3.2</mybatis-plus-generator.version>
         <velocity-engine.version>2.3</velocity-engine.version>
         <mysql-connector.version>8.0.12</mysql-connector.version>
         <alibaba-druid.version>1.1.22</alibaba-druid.version>
@@ -159,6 +159,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
             <version>${spring-boot-starter-mail.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+            <version>4.3.0</version>
         </dependency>
 
     </dependencies>

@@ -22,7 +22,8 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "删除标志 0未删除 1删除")
-    private Integer isDelete;
+    @TableField("is_deleted")
+    private Integer isDeleted;
 
     @Schema(description = "创建者")
     @TableField(fill = FieldFill.INSERT)
