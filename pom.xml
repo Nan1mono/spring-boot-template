@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.4</version>
+        <version>2.7.16</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -17,35 +17,23 @@
 
     <!-- 环境控制 -->
     <properties>
-        <java.version>1.8</java.version>
-        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <java.version>11</java.version>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
         <velocity-engine.version>2.3</velocity-engine.version>
         <mysql-connector.version>8.0.12</mysql-connector.version>
         <alibaba-druid.version>1.1.22</alibaba-druid.version>
-        <alibaba-fastjson.version>1.2.76</alibaba-fastjson.version>
-        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
-        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
-        <commons-collections.version>3.2.2</commons-collections.version>
-        <joda-time.version>2.10.10</joda-time.version>
-        <alibaba-easyexcel.version>2.2.0-beta2</alibaba-easyexcel.version>
+        <alibaba-fastjson2.version>2.0.40</alibaba-fastjson2.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <alibaba-easyexcel.version>3.3.2</alibaba-easyexcel.version>
         <jjwt.version>0.9.1</jjwt.version>
         <spring-boot-starter-mail.version>2.2.6.RELEASE</spring-boot-starter-mail.version>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <!-- 排除 默认使用的logback  -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -93,7 +81,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <!--            <version>5.1.47</version>-->
             <version>${mysql-connector.version}</version>
         </dependency>
 
@@ -110,9 +97,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${alibaba-fastjson.version}</version>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${alibaba-fastjson2.version}</version>
         </dependency>
 
         <!-- yml or properties metadata processor 配置文件快捷提示 -->
@@ -122,22 +109,11 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- OpenAPI3 -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger2.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger-ui.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>${swagger-bootstrap-ui.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <!--　java增强API　-->
@@ -148,9 +124,9 @@
 
         <!-- java增强API -->
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>${commons-collections.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
         </dependency>
 
         <!-- slf4j日志记录 -->
@@ -163,13 +139,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <!-- 时间处理辅助工具 -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
         </dependency>
 
         <!-- excel工具 -->

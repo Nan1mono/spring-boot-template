@@ -1,26 +1,22 @@
 package com.project.template.common.exception;
 
 import com.project.template.common.result.ResultCodeEnum;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * 自定义全局异常类
  *
  * @author qy
  */
-@Data
-@ApiModel(value = "自定义全局异常类")
+@Getter
 public class MyException extends RuntimeException {
 
-    @ApiModelProperty(value = "异常状态码")
-    private Integer code;
+    private final Integer code;
 
     /**
      * 通过状态码和错误消息创建异常对象
-     * @param message
-     * @param code
+     * @param message   exception message
+     * @param code      exception code
      */
     public MyException(String message, Integer code) {
         super(message);
@@ -29,7 +25,7 @@ public class MyException extends RuntimeException {
 
     /**
      * 接收枚举类型对象
-     * @param resultCodeEnum
+     * @param resultCodeEnum exceptionCodeEnum
      */
     public MyException(ResultCodeEnum resultCodeEnum) {
         super(resultCodeEnum.getMessage());
