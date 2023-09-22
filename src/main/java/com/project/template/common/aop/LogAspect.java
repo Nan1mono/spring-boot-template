@@ -1,6 +1,6 @@
 package com.project.template.common.aop;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.project.template.common.annotation.LogAnnotation;
 import com.project.template.common.util.HttpContextUtils;
 import com.project.template.common.util.IpUtils;

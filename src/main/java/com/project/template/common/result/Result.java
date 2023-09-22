@@ -1,29 +1,27 @@
 package com.project.template.common.result;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
  * 全局统一返回结果类
  */
 @Data
-@ApiModel(value = "全局统一返回结果")
+//@ApiModel(value = "全局统一返回结果")
 public class Result<T> {
 
-    @ApiModelProperty(value = "返回码")
+//    @ApiModelProperty(value = "返回码")
     private Integer code;
 
-    @ApiModelProperty(value = "返回消息")
+//    @ApiModelProperty(value = "返回消息")
     private String message;
 
-    @ApiModelProperty(value = "返回数据")
+//    @ApiModelProperty(value = "返回数据")
     private T data;
 
     public Result(){}
 
     protected static <T> Result<T> build(T data) {
-        Result<T> result = new Result<T>();
+        Result<T> result = new Result<>();
         if (data != null)
             result.setData(data);
         return result;
@@ -54,7 +52,6 @@ public class Result<T> {
      * @return
      */
     public static<T> Result<T> ok(T data){
-        Result<T> result = build(data);
         return build(data, ResultCodeEnum.SUCCESS);
     }
 
@@ -69,7 +66,6 @@ public class Result<T> {
      * @return
      */
     public static<T> Result<T> fail(T data){
-        Result<T> result = build(data);
         return build(data, ResultCodeEnum.FAIL);
     }
 

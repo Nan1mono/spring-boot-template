@@ -12,7 +12,7 @@ public class MyBatisPlusConfig {
 
     /**
      * 引入myBatisPlus的网页分页插件
-     * @return
+     *
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
