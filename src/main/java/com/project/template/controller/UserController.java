@@ -5,9 +5,8 @@ import com.project.template.model.entity.User;
 import com.project.template.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -29,8 +28,16 @@ public class UserController {
 
     @GetMapping("/getById")
     @Operation(summary = "根据id获取user")
-    public Result<User> getById(Long id) {
+    @PreAuthorize("hasAnyAuthority('user:view')")
+    public Result<User> getById(@RequestParam Long id) {
         return Result.ok(userService.getById(id));
+    }
+
+    @PostMapping("/insert")
+    @Operation(summary = "添加User")
+    public Result<Void> insert(@RequestBody User user){
+        userService.save(user);
+        return Result.ok();
     }
 
 }
