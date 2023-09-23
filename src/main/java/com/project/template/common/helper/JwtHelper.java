@@ -24,12 +24,12 @@ public class JwtHelper {
 
     @Value("${template.token.expiration}")
     private void setTokenExpiration(long tokenExpiration) {
-        this.tokenExpiration = (tokenExpiration != 0) ? tokenExpiration : 60 * 60L;
+        JwtHelper.tokenExpiration = (tokenExpiration != 0) ? tokenExpiration : 60 * 60L;
     }
 
     @Value("${template.token.sign-key}")
     private void setTokenSignKey(String tokenSignKey) {
-        this.tokenSignKey = StringUtils.isNotBlank(tokenSignKey) ? tokenSignKey : "nan1mono";
+        JwtHelper.tokenSignKey = StringUtils.isNotBlank(tokenSignKey) ? tokenSignKey : "nan1mono";
     }
 
 
