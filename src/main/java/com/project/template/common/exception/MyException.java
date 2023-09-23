@@ -2,6 +2,7 @@ package com.project.template.common.exception;
 
 import com.project.template.common.result.ResultCodeEnum;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自定义全局异常类
@@ -9,6 +10,7 @@ import lombok.Getter;
  * @author qy
  */
 @Getter
+@Slf4j
 public class MyException extends RuntimeException {
 
     private final Integer code;
@@ -30,6 +32,11 @@ public class MyException extends RuntimeException {
     public MyException(ResultCodeEnum resultCodeEnum) {
         super(resultCodeEnum.getMessage());
         this.code = resultCodeEnum.getCode();
+    }
+
+    public MyException(Exception e) {
+        super(e.getMessage());
+        this.code = 201;
     }
 
     @Override

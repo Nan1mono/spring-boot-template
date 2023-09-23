@@ -26,6 +26,10 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: is_deleted
+      logic-delete-value: 1
 
 knife4j:
   enable: true
@@ -34,4 +38,20 @@ knife4j:
 springdoc:
   api-docs:
     enabled: true
+
+template:
+  # MetaHandler控制器
+  meta-handler:
+    # meta-handler是否启用
+    enable: true
+    # 插入字段
+    column: "nickname"
+  # token配置
+  token:
+    # 加密盐配置
+    sign-key: "nan1mono"
+    # 过期时间配置(秒)
+    expiration: 86400
+
+
 

@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result<Void> error(Exception e){
-        log.error(e.getLocalizedMessage());
+        log.error("Exception Happened:", e);
         return Result.fail();
     }
 

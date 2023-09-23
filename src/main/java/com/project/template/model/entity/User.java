@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.project.template.model.base.entity.BaseEntity;
-import java.time.LocalDate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -21,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_user")
-@Schema(name = "User", description = "")
+@Schema(name = "User", description = "账号/用户/管理员表")
 public class User extends BaseEntity {
 
     @Schema(description = "id")
@@ -47,4 +49,12 @@ public class User extends BaseEntity {
     @Schema(description = "密码")
     @TableField("password")
     private String password;
+
+    @Schema(description = "密码到期时间 空代表永不过期")
+    @TableField("pwd_expiration_time")
+    private LocalDateTime pwdExpirationTime;
+
+    @Schema(description = "状态 1启用 0停用")
+    @TableField("status")
+    private Integer status;
 }

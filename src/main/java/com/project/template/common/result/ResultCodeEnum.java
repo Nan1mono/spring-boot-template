@@ -11,14 +11,14 @@ public enum ResultCodeEnum {
     SUCCESS(200,"成功"),
     FAIL(201, "失败"),
     PASSWORD_ERROR(201, "账号或密码错误"),
-    PARAM_ERROR( 202, "参数不正确"),
-    SERVICE_ERROR(203, "服务异常"),
+    PASSWORD_EXPIRATION(201, "账号密码已过期，请修改密码"),
+    //    PARAM_ERROR( 202, "参数不正确"),
+//    SERVICE_ERROR(203, "服务异常"),
     DATA_ERROR(204, "数据异常"),
     LOGIN_AUTH(208, "未登陆"),
-    PERMISSION(209, "没有权限"),
+    //    PERMISSION(209, "没有权限"),
     CODE_ERROR(210, "验证码错误"),
     LOGIN_DISABLED_ERROR(212, "改用户已被禁用"),
-    LOGIN_ACL(215, "没有权限"),
     FETCH_USERINFO_ERROR( 219, "获取用户信息失败"),
     ;
 

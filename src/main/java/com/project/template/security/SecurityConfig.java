@@ -7,6 +7,7 @@ import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,13 +41,19 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            User user = userService.lambdaQuery().eq(User::getUsername, username).one();
-            if (user != null){
+            User user = userService.lambdaQuery()
+                    .eq(User::getUsername, username)
+                    .one();
+            if (user != null) {
                 return new SecurityUserDetail(user);
             }
             throw new MyException(ResultCodeEnum.PASSWORD_ERROR);
         };
     }
 
+    @Bean
+    public AuthenticationConfiguration authenticationConfiguration() {
+        return new AuthenticationConfiguration();
+    }
 
 }

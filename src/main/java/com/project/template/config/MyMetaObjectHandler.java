@@ -1,10 +1,9 @@
 package com.project.template.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.project.template.common.constant.Constants;
-import com.project.template.common.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -12,29 +11,32 @@ import java.time.LocalDateTime;
 @Slf4j
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
+
+    @Value("${template.meta-handler.enable}")
+    private boolean enable;
+
+    @Value("${template.meta-handler.column}")
+    private String updateAndCreateName;
+
     @Override
     public void insertFill(MetaObject metaObject) {
-        log.info("start insert fill ....");
-        this.strictInsertFill(metaObject, "createOn", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "updateOn", LocalDateTime.class, LocalDateTime.now());
+        if (enable) {
+            log.info("start insert fill ....");
+            this.strictInsertFill(metaObject, "createBy", String.class, updateAndCreateName);
+            this.strictInsertFill(metaObject, "updateBy", String.class, updateAndCreateName);
+            this.strictInsertFill(metaObject, "createOn", LocalDateTime.class, LocalDateTime.now());
+            this.strictInsertFill(metaObject, "updateOn", LocalDateTime.class, LocalDateTime.now());
+        }
     }
 
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.info("start update fill ....");
-        this.strictUpdateFill(metaObject, "updateOn", LocalDateTime.class, LocalDateTime.now());
-    }
-
-    private Long getUser() {
-        String userId;
-        try {
-            userId = HttpUtils.getRequestHeaderInfo(Constants.USER_ID);
-            userId = (userId == null || "".equals(userId)) ? Constants.DEFAULT_USER_ID : userId;
-        } catch (Exception e) {
-            userId = Constants.DEFAULT_USER_ID;
+        if (enable) {
+            log.info("start update fill ....");
+            this.strictUpdateFill(metaObject, "updateOn", LocalDateTime.class, LocalDateTime.now());
+            this.strictInsertFill(metaObject, "updateBy", String.class, updateAndCreateName);
         }
-        return Long.parseLong(userId);
     }
 }
 

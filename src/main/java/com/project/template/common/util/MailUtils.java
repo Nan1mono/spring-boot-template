@@ -2,7 +2,6 @@ package com.project.template.common.util;
 
 
 import com.project.template.common.exception.MyException;
-import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.model.bo.MailRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -40,7 +39,7 @@ public class MailUtils {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             while (count-- != 0) {
-                String codeNum = "";
+                StringBuilder codeNum = new StringBuilder();
                 int[] code = new int[3];
                 Random random = new Random();
                 //自动生成验证码
@@ -51,9 +50,8 @@ public class MailUtils {
                     code[0] = num;
                     code[1] = uppercase;
                     code[2] = lowercase;
-                    codeNum += (char) code[random.nextInt(3)];
+                    codeNum.append((char) code[random.nextInt(3)]);
                 }
-                System.out.println(codeNum);
                 //标题
                 helper.setSubject("您的验证码为：" + codeNum);
                 //内容
@@ -63,12 +61,10 @@ public class MailUtils {
                 //邮件发送者，必须和配置文件里的一样，不然授权码匹配不上
                 helper.setFrom(from);
                 mailSender.send(mimeMessage);
-                System.out.println("邮件发送成功！" + (count + 1));
-                mailRecord.setMessage(codeNum);
+                mailRecord.setMessage(codeNum.toString());
             }
         } catch (MessagingException e){
-            e.printStackTrace();
-            throw new MyException(ResultCodeEnum.SERVICE_ERROR);
+            throw new MyException(e);
         }
         return mailRecord;
     }
