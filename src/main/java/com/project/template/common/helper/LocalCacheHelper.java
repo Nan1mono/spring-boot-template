@@ -1,4 +1,4 @@
-package com.project.template.common.util;
+package com.project.template.common.helper;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.cache.Cache;
@@ -12,10 +12,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class LocalCacheService {
+public class LocalCacheHelper {
 
     // cache的构造是一个隐式构造，需隐藏构造器
-    private LocalCacheService() {
+    private LocalCacheHelper() {
 
     }
 

@@ -16,14 +16,14 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private boolean enable;
 
     @Value("${template.meta-handler.column}")
-    private String updateAndCreateName;
+    private String column;
 
     @Override
     public void insertFill(MetaObject metaObject) {
         if (enable) {
             log.info("start insert fill ....");
-            this.strictInsertFill(metaObject, "createBy", String.class, updateAndCreateName);
-            this.strictInsertFill(metaObject, "updateBy", String.class, updateAndCreateName);
+            this.strictInsertFill(metaObject, "createBy", String.class, column);
+            this.strictInsertFill(metaObject, "updateBy", String.class, column);
             this.strictInsertFill(metaObject, "createOn", LocalDateTime.class, LocalDateTime.now());
             this.strictInsertFill(metaObject, "updateOn", LocalDateTime.class, LocalDateTime.now());
         }
@@ -35,7 +35,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         if (enable) {
             log.info("start update fill ....");
             this.strictUpdateFill(metaObject, "updateOn", LocalDateTime.class, LocalDateTime.now());
-            this.strictInsertFill(metaObject, "updateBy", String.class, updateAndCreateName);
+            this.strictInsertFill(metaObject, "updateBy", String.class, column);
         }
     }
 }

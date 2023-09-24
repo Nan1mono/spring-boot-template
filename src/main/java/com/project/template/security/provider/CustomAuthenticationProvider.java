@@ -7,6 +7,7 @@ import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,12 @@ import java.time.LocalDateTime;
 @Service
 public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
+    @Value("${template.token.expiration}")
+    private long tokenExpiration;
+
+    @Value("${template.token.sign-key}")
+    private String tokenSignKey;
+
     @Resource
     private UserDetailsService userDetailsService;
 
@@ -39,12 +46,10 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
      * @throws AuthenticationException 身份验证异常
      */
     @Override
-    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        // 校验账号是否过期
-        String username = userDetails.getUsername();
-        String password = userDetails.getPassword();
-        // 获取用户并检索密码过期时间
-        User user = userService.lambdaQuery().eq(User::getUsername, username).eq(User::getPassword, password).one();
+    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)
+            throws AuthenticationException {
+        SecurityUserDetail securityUserDetail = (SecurityUserDetail) userDetails;
+        User user = securityUserDetail.getUser();
         LocalDateTime pwdExpirationTime = user.getPwdExpirationTime();
         // 如果时间存在，则代表存在过期时间
         if (pwdExpirationTime != null) {
@@ -87,9 +92,9 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         this.additionalAuthenticationChecks(securityUserDetail, (UsernamePasswordAuthenticationToken) authentication);
         // 校验通过
         User user = securityUserDetail.getUser();
-        String token = JwtHelper.createToken(user.getId(), user.getUsername(), user.getNickname(), user.getRealName());
+        String token = JwtHelper.createToken(user.getId(), user.getUsername(), user.getNickname(), user.getRealName(), tokenExpiration, tokenSignKey);
         securityUserDetail.setToken(token);
-        // TODO date: 2023-09-24 01:25:02    description: 补充权限接口
+        // TODO date: 2023-09-24 01:25:02    description: 补充权限接口，增加缓存机制
         return UsernamePasswordAuthenticationToken.authenticated(securityUserDetail, null, Lists.newArrayList((GrantedAuthority) () -> "test"));
     }
 
