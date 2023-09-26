@@ -7,6 +7,7 @@ import com.project.template.common.exception.MyException;
 import com.project.template.common.result.ResultCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -74,7 +75,7 @@ public class LocalCacheHelper {
             throw new MyException(ResultCodeEnum.DATA_ERROR);
         }
         try {
-            return cache.get(key, () -> null);
+            return cache.get(key, () -> "");
         } catch (ExecutionException e) {
             log.warn(e.getLocalizedMessage());
             throw new MyException(ResultCodeEnum.DATA_ERROR);
@@ -90,6 +91,9 @@ public class LocalCacheHelper {
      */
     public static <T> T getParse(Object key, Class<T> clazz) {
         Object value = get(key);
+        if (ObjectUtils.isEmpty(value) || StringUtils.isBlank(value.toString())) {
+            return null;
+        }
         return JSON.parseObject(value.toString(), clazz);
     }
 
