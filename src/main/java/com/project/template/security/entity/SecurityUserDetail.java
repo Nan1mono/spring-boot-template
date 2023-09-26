@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 
 @Getter
@@ -18,6 +19,9 @@ public class SecurityUserDetail implements UserDetails {
 
     @Setter
     private String token;
+
+    @Setter
+    private transient List<SecurityButton> buttonList;
 
     public SecurityUserDetail(User user) {
         this.user = user;

@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import com.project.template.common.exception.MyException;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.result.ResultCodeEnum;
+import com.project.template.mapper.UserButtonMapper;
 import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityUserDetail;
-import com.project.template.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
  * 自定义密码校验流程
  */
 @Service
-public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public abstract class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     @Value("${template.token.expiration}")
     private long tokenExpiration;
@@ -32,11 +32,14 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     @Value("${template.token.sign-key}")
     private String tokenSignKey;
 
-    @Resource
-    private UserDetailsService userDetailsService;
+    @Value("${template.security.button-enable}")
+    private Boolean isFind;
 
     @Resource
-    private UserService userService;
+    private UserButtonMapper userButtonMapper;
+
+    @Resource
+    private UserDetailsService userDetailsService;
 
     /**
      * 其他身份验证检查
@@ -94,6 +97,8 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         User user = securityUserDetail.getUser();
         String token = JwtHelper.createToken(user.getId(), user.getUsername(), user.getNickname(), user.getRealName(), tokenExpiration, tokenSignKey);
         securityUserDetail.setToken(token);
+        // 检索用户对应的权限按钮
+        isFindUserButton(isFind == null || isFind, securityUserDetail);
         // TODO date: 2023-09-24 01:25:02    description: 补充权限接口，增加缓存机制
         return UsernamePasswordAuthenticationToken.authenticated(securityUserDetail, null, Lists.newArrayList((GrantedAuthority) () -> "test"));
     }
@@ -108,5 +113,16 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+
+    private void isFindUserButton(boolean isFind, SecurityUserDetail securityUserDetail) {
+        if (isFind) {
+            User user = securityUserDetail.getUser();
+            securityUserDetail.setButtonList(userButtonMapper.findUserButton(user.getId()));
+        }
+    }
+
+    private void findUserMenu(SecurityUserDetail securityUserDetail) {
+
     }
 }
