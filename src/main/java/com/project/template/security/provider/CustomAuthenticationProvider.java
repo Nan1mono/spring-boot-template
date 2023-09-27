@@ -1,6 +1,5 @@
 package com.project.template.security.provider;
 
-import com.google.common.collect.Lists;
 import com.project.template.common.exception.MyException;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
@@ -18,7 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -123,7 +122,10 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 用户登录信息添加至本地缓存
         LocalCacheHelper.remove(securityUserDetail.getUser().getId());
         LocalCacheHelper.putJSONStr(securityUserDetail.getUser().getId(), securityUserDetail);
-        return UsernamePasswordAuthenticationToken.authenticated(securityUserDetail, null, Lists.newArrayList((GrantedAuthority) () -> "test"));
+        UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
+                .authenticated(securityUserDetail, null, securityUserDetail.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticated);
+        return authenticated;
     }
 
     /**

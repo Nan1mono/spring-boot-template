@@ -26,6 +26,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .mvcMatchers("/login/authTest")
+                .hasAuthority("menu_on_page_one_add_button:view");
         return http.build();
     }
 
@@ -55,5 +58,18 @@ public class SecurityConfig {
     public AuthenticationConfiguration authenticationConfiguration() {
         return new AuthenticationConfiguration();
     }
+
+//    @Bean
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/res/**", "/login/login*").permitAll()
+//                .antMatchers("/demo/user-list").access("hasRole('ROLE_Admin')")
+//                .anyRequest().authenticated()
+//                .and().formLogin().loginPage("/login/login").defaultSuccessUrl("/")
+//                .passwordParameter("password")
+//                .usernameParameter("username")
+//                .and().logout().logoutSuccessUrl("/login/login");
+//    }
 
 }

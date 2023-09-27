@@ -3,6 +3,7 @@ package com.project.template.controller;
 import com.project.template.common.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,6 +32,13 @@ public class LoginController {
                 new UsernamePasswordAuthenticationToken(username, password);
         AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
         return Result.ok(authenticationManager.authenticate(authentication));
+    }
+
+    @GetMapping("/authTest")
+    @Operation(summary = "权限测试接口")
+    @PreAuthorize("hasAuthority('menu_on_page_one_add_button:view')")
+    public Result<String> authTest() {
+        return Result.ok("请求成功");
     }
 
 }
