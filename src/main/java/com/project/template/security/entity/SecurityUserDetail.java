@@ -23,6 +23,12 @@ public class SecurityUserDetail implements UserDetails {
     @Setter
     private transient List<SecurityButton> buttonList;
 
+    @Setter
+    private transient List<SecurityUserRole> userRoleList;
+
+    @Setter
+    private transient List<SecurityRoleMenu> roleMenuList;
+
     public SecurityUserDetail(User user) {
         this.user = user;
     }

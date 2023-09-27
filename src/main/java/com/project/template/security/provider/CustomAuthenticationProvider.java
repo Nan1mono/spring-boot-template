@@ -4,9 +4,13 @@ import com.google.common.collect.Lists;
 import com.project.template.common.exception.MyException;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.result.ResultCodeEnum;
+import com.project.template.mapper.RoleMenuMapper;
 import com.project.template.mapper.UserButtonMapper;
+import com.project.template.mapper.UserRoleMapper;
 import com.project.template.model.entity.User;
+import com.project.template.security.entity.SecurityRoleMenu;
 import com.project.template.security.entity.SecurityUserDetail;
+import com.project.template.security.entity.SecurityUserRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -19,12 +23,14 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 自定义密码校验流程
  */
 @Service
-public abstract class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     @Value("${template.token.expiration}")
     private long tokenExpiration;
@@ -40,6 +46,12 @@ public abstract class CustomAuthenticationProvider extends AbstractUserDetailsAu
 
     @Resource
     private UserDetailsService userDetailsService;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
+
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
 
     /**
      * 其他身份验证检查
@@ -99,6 +111,8 @@ public abstract class CustomAuthenticationProvider extends AbstractUserDetailsAu
         securityUserDetail.setToken(token);
         // 检索用户对应的权限按钮
         isFindUserButton(isFind == null || isFind, securityUserDetail);
+        // 检索用户对应的角色集合
+        findUserRole(securityUserDetail);
         // TODO date: 2023-09-24 01:25:02    description: 补充权限接口，增加缓存机制
         return UsernamePasswordAuthenticationToken.authenticated(securityUserDetail, null, Lists.newArrayList((GrantedAuthority) () -> "test"));
     }
@@ -122,7 +136,18 @@ public abstract class CustomAuthenticationProvider extends AbstractUserDetailsAu
         }
     }
 
-    private void findUserMenu(SecurityUserDetail securityUserDetail) {
+    private void findUserRole(SecurityUserDetail securityUserDetail) {
+        Long userId = securityUserDetail.getUser().getId();
+        List<SecurityUserRole> userRoleList = userRoleMapper.findUserRole(userId);
+        securityUserDetail.setUserRoleList(userRoleList);
+        List<SecurityRoleMenu> roleMenuList = findUserMenu(userRoleList.stream()
+                .map(SecurityUserRole::getRoleId)
+                .distinct()
+                .collect(Collectors.toList()));
+        securityUserDetail.setRoleMenuList(roleMenuList);
+    }
 
+    private List<SecurityRoleMenu> findUserMenu(List<Long> roleIdList) {
+        return roleMenuMapper.findRoleMenu(roleIdList);
     }
 }
