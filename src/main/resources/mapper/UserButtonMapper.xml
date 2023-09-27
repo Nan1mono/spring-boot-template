@@ -3,13 +3,20 @@
 <mapper namespace="com.project.template.mapper.UserButtonMapper">
 
     <select id="findUserButton" parameterType="int" resultType="com.project.template.security.entity.SecurityButton">
-        SELECT t2.menu_id,
-               t1.user_id,
-               t2.button_code,
-               t2.button_name
+        SELECT
+            t2.menu_id,
+            t3.menu_code,
+            t3.menu_name,
+            t3.path,
+            t3.uri,
+            t1.user_id,
+            t2.button_code,
+            t2.button_name
         FROM `sys_user_button` AS t1
         LEFT JOIN sys_button AS t2
         ON t1.button_id = t2.id AND t2.is_deleted = 0
+        LEFT JOIN sys_menu AS t3
+        ON t3.id = t2.menu_id AND t3.is_deleted = 0
         WHERE t1.is_deleted = 0
         <if test="userId != null and userId != ''">
             AND t1.user_id = #{userId}

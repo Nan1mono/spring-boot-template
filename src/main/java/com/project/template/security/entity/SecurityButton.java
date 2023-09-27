@@ -14,6 +14,18 @@ public class SecurityButton {
     @Schema(description = "菜单id")
     private Long menuId;
 
+    @Schema(description = "菜单编号")
+    private String menuCode;
+
+    @Schema(description = "菜单名称")
+    private String menuName;
+
+    @Schema(description = "主要路径")
+    private String path;
+
+    @Schema(description = "路由路径")
+    private String uri;
+
     @Schema(description = "按钮编号")
     private String buttonCode;
 

@@ -17,14 +17,14 @@
 
     <select id="findRoleMenu" parameterType="long" resultMap="SecurityRoleMenuMap">
         SELECT
-        role_menu.role_id,
-        role_menu.menu_id,
-        menu.menu_code,
-        menu.menu_name,
-        menu.parent_id,
-        menu.`level`,
-        menu.path,
-        menu.uri
+            role_menu.role_id,
+            role_menu.menu_id,
+            menu.menu_code,
+            menu.menu_name,
+            menu.parent_id,
+            menu.`level`,
+            menu.path,
+            menu.uri
         FROM sys_role_menu AS role_menu
         LEFT JOIN sys_menu AS menu
         ON role_menu.menu_id = menu.id
@@ -42,19 +42,20 @@
 
     <select id="listSecurityRoleMenuByParentId" parameterType="long" resultMap="SecurityRoleMenuMap">
         SELECT
-        NULL AS role_id,
-        menu.id AS menu_id,
-        menu.menu_code,
-        menu.menu_name,
-        menu.parent_id,
-        menu.`level`,
-        menu.path,
-        menu.uri
+            NULL AS role_id,
+            menu.id AS menu_id,
+            menu.menu_code,
+            menu.menu_name,
+            menu.parent_id,
+            menu.`level`,
+            menu.path,
+            menu.uri
         FROM sys_menu AS menu
         WHERE menu.is_deleted = 0
         <if test="parentId != null and parentId != ''">
             AND menu.parent_id = #{parentId}
         </if>
+        ORDER BY menu.sorted
     </select>
 
 </mapper>

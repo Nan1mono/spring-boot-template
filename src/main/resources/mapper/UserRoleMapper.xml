@@ -4,10 +4,10 @@
 
     <select id="findUserRole" parameterType="long" resultType="com.project.template.security.entity.SecurityUserRole">
         SELECT DISTINCT
-        user_role.user_id,
-        user_role.role_id,
-        role.role_code,
-        role.role_name
+            user_role.user_id,
+            user_role.role_id,
+            role.role_code,
+            role.role_name
         FROM sys_user_role AS user_role
         LEFT JOIN sys_role AS role ON user_role.role_id = role.id AND role.is_deleted = 0
         WHERE user_role.is_deleted = 0
