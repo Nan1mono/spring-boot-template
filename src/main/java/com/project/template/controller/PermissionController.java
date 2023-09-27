@@ -4,6 +4,7 @@ import com.project.template.common.result.Result;
 import com.project.template.model.entity.Permission;
 import com.project.template.service.PermissionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,10 @@ public class PermissionController {
 
     @GetMapping("/insert")
     @Operation(summary = "添加权限")
-    public Result<Void> insert(@RequestParam(name = "权限信息编号") String code, @RequestParam(name = "资源编号") String resourceCode,
-                                @RequestParam(name = "资源类型:menu-菜单资源,button-按钮资源,resource-自定义资源") String type,
-                                @RequestParam(name = "操作") String operation){
+    public Result<Void> insert(@RequestParam @Parameter(description = "权限编号") String code,
+                               @RequestParam @Parameter(description = "资源编号") String resourceCode,
+                               @RequestParam @Parameter(description = "资源类型:menu-菜单资源,button-按钮资源,resource-自定义资源") String type,
+                               @RequestParam @Parameter(description = "操作") String operation){
         Permission build = Permission.builder()
                 .code(code)
                 .permissionCode(resourceCode.concat(":").concat(operation))
