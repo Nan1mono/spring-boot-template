@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Component
-public abstract class MyMetaObjectHandler implements MetaObjectHandler {
+public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Value("${template.meta-handler.enable}")
     private boolean enable;

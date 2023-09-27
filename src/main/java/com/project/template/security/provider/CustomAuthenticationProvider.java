@@ -3,6 +3,7 @@ package com.project.template.security.provider;
 import com.google.common.collect.Lists;
 import com.project.template.common.exception.MyException;
 import com.project.template.common.helper.JwtHelper;
+import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.mapper.RoleMenuMapper;
 import com.project.template.mapper.UserButtonMapper;
@@ -113,7 +114,9 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         isFindUserButton(isFind == null || isFind, securityUserDetail);
         // 检索用户对应的角色集合
         findUserRole(securityUserDetail);
-        // TODO date: 2023-09-24 01:25:02    description: 补充权限接口，增加缓存机制
+        // 用户登录信息添加至本地缓存
+        LocalCacheHelper.remove(securityUserDetail.getUser().getId());
+        LocalCacheHelper.putJSONStr(securityUserDetail.getUser().getId(), securityUserDetail);
         return UsernamePasswordAuthenticationToken.authenticated(securityUserDetail, null, Lists.newArrayList((GrantedAuthority) () -> "test"));
     }
 
