@@ -6,6 +6,7 @@ import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.mapper.RoleMenuMapper;
+import com.project.template.mapper.RolePermissionMapper;
 import com.project.template.mapper.UserButtonMapper;
 import com.project.template.mapper.UserRoleMapper;
 import com.project.template.model.entity.User;
@@ -53,6 +54,9 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     @Resource
     private RoleMenuMapper roleMenuMapper;
+
+    @Resource
+    private RolePermissionMapper rolePermissionMapper;
 
     /**
      * 其他身份验证检查
@@ -114,6 +118,8 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         isFindUserButton(isFind == null || isFind, securityUserDetail);
         // 检索用户对应的角色集合
         findUserRole(securityUserDetail);
+        // 设定密码为空
+        securityUserDetail.getUser().setPassword(null);
         // 用户登录信息添加至本地缓存
         LocalCacheHelper.remove(securityUserDetail.getUser().getId());
         LocalCacheHelper.putJSONStr(securityUserDetail.getUser().getId(), securityUserDetail);
@@ -143,14 +149,19 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         Long userId = securityUserDetail.getUser().getId();
         List<SecurityUserRole> userRoleList = userRoleMapper.findUserRole(userId);
         securityUserDetail.setUserRoleList(userRoleList);
-        List<SecurityRoleMenu> roleMenuList = findUserMenu(userRoleList.stream()
+        List<Long> roleIdList = userRoleList.stream()
                 .map(SecurityUserRole::getRoleId)
                 .distinct()
-                .collect(Collectors.toList()));
-        securityUserDetail.setRoleMenuList(roleMenuList);
+                .collect(Collectors.toList());
+        securityUserDetail.setRoleMenuList(findUserMenu(roleIdList));
+        securityUserDetail.setAuthorities(findUserPermission(roleIdList));
     }
 
     private List<SecurityRoleMenu> findUserMenu(List<Long> roleIdList) {
         return roleMenuMapper.findRoleMenu(roleIdList);
+    }
+
+    private List<String> findUserPermission(List<Long> roleIdList) {
+        return rolePermissionMapper.findUserPermission(roleIdList);
     }
 }

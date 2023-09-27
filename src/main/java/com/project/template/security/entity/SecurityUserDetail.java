@@ -5,29 +5,37 @@ import com.project.template.model.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 
-@Getter
 public class SecurityUserDetail implements UserDetails {
 
+    @Getter
+    @Setter
     private final User user;
 
     @Setter
+    @Getter
     private String token;
 
     @Setter
+    @Getter
     private transient List<SecurityButton> buttonList;
 
     @Setter
+    @Getter
     private transient List<SecurityUserRole> userRoleList;
 
     @Setter
+    @Getter
     private transient List<SecurityRoleMenu> roleMenuList;
+
+    private List<SimpleGrantedAuthority> authorities;
 
     public SecurityUserDetail(User user) {
         this.user = user;
@@ -35,7 +43,13 @@ public class SecurityUserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return authorities;
+    }
+
+    public void setAuthorities(List<String> permissionList) {
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        permissionList.forEach(t -> authorityList.add(new SimpleGrantedAuthority(t)));
+        this.authorities = authorityList;
     }
 
     @Override

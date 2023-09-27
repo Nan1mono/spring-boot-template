@@ -10,9 +10,6 @@ import java.util.List;
 @Getter
 public class SecurityRoleMenu {
 
-    @Schema(description = "角色id")
-    private Long roleId;
-
     @Schema(description = "菜单id")
     private Long menuId;
 

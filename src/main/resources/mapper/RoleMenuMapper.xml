@@ -3,7 +3,6 @@
 <mapper namespace="com.project.template.mapper.RoleMenuMapper">
 
     <resultMap id="SecurityRoleMenuMap" type="com.project.template.security.entity.SecurityRoleMenu">
-        <result column="role_id" property="roleId"/>
         <result column="menu_id" property="menuId"/>
         <result column="menu_code" property="menuCode"/>
         <result column="menu_name" property="menuName"/>
@@ -17,7 +16,6 @@
 
     <select id="findRoleMenu" parameterType="long" resultMap="SecurityRoleMenuMap">
         SELECT
-            role_menu.role_id,
             role_menu.menu_id,
             menu.menu_code,
             menu.menu_name,
@@ -42,7 +40,6 @@
 
     <select id="listSecurityRoleMenuByParentId" parameterType="long" resultMap="SecurityRoleMenuMap">
         SELECT
-            NULL AS role_id,
             menu.id AS menu_id,
             menu.menu_code,
             menu.menu_name,

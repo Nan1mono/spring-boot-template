@@ -2,7 +2,10 @@ package com.project.template.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.project.template.model.entity.RolePermission;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RolePermissionMapper extends BaseMapper<RolePermission> {
+
+    List<String> findUserPermission(@Param("roleIdList") List<Long> roleIdList);
 
 }
