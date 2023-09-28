@@ -36,10 +36,11 @@ public class PermissionFilter extends OncePerRequestFilter {
         if (userId == null) {
             throw new MyException(ResultCodeEnum.LOGIN_AUTH);
         }
-        SecurityUserDetail userDetail = LocalCacheHelper.getParse(Long.valueOf(userId.toString()), SecurityUserDetail.class);
-        if (userDetail == null) {
+        Object value = LocalCacheHelper.getIfPresent(Long.valueOf(userId.toString()));
+        if (value == null) {
             throw new MyException(ResultCodeEnum.LOGIN_AUTH);
         }
+        SecurityUserDetail userDetail = (SecurityUserDetail) value;
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
                 .authenticated(userDetail, userDetail.getUser().getPassword(), userDetail.getAuthorities());
         SecurityContextHolder.getContext()

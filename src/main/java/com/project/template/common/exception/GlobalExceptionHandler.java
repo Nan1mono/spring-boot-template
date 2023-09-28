@@ -15,9 +15,9 @@ public class GlobalExceptionHandler {
      * @return Result<Void> 统一异常信息
      */
     @ExceptionHandler(Exception.class)
-    public Result<Void> error(Exception e){
+    public Result<Object> error(Exception e) {
         log.error("Exception Happened:", e);
-        return Result.fail();
+        return Result.fail(e.getMessage());
     }
 
     /**
