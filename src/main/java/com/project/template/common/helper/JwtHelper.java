@@ -1,5 +1,7 @@
 package com.project.template.common.helper;
 
+import com.project.template.common.exception.MyException;
+import com.project.template.common.result.ResultCodeEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
 import org.apache.commons.lang3.StringUtils;
@@ -96,8 +98,13 @@ public class JwtHelper {
      */
     private static Claims decrypt(String token, String tokenSignKey) {
         if (StringUtils.isEmpty(token)) return new DefaultClaims();
-        Jws<Claims> claimsJws
-                = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);
+        Jws<Claims> claimsJws;
+        try {
+            claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
+                 IllegalArgumentException e) {
+            throw new MyException(ResultCodeEnum.FETCH_USERINFO_ERROR);
+        }
         return claimsJws.getBody();
     }
 

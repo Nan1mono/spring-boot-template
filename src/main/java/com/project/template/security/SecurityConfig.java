@@ -4,31 +4,44 @@ import com.project.template.common.exception.MyException;
 import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityUserDetail;
+import com.project.template.security.filter.PermissionFilter;
 import com.project.template.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Resource
     private UserService userService;
 
+    @Resource
+    private PermissionFilter permissionFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .mvcMatchers("/login/authTest")
-                .hasAuthority("menu_on_page_one_add_button:view");
+        http.cors().disable();
+        http.csrf().disable();
+        // 关闭 session 管理
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 禁止浏览器缓存
+        http.headers().cacheControl().disable();
+        http.addFilterBefore(permissionFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -39,6 +52,18 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 获取AuthenticationManager（认证管理器），登录时认证使用
+     *
+     * @param authenticationConfiguration
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -53,23 +78,5 @@ public class SecurityConfig {
             throw new MyException(ResultCodeEnum.PASSWORD_ERROR);
         };
     }
-
-    @Bean
-    public AuthenticationConfiguration authenticationConfiguration() {
-        return new AuthenticationConfiguration();
-    }
-
-//    @Bean
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/res/**", "/login/login*").permitAll()
-//                .antMatchers("/demo/user-list").access("hasRole('ROLE_Admin')")
-//                .anyRequest().authenticated()
-//                .and().formLogin().loginPage("/login/login").defaultSuccessUrl("/")
-//                .passwordParameter("password")
-//                .usernameParameter("username")
-//                .and().logout().logoutSuccessUrl("/login/login");
-//    }
 
 }

@@ -117,14 +117,14 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         isFindUserButton(isFind == null || isFind, securityUserDetail);
         // 检索用户对应的角色集合
         findUserRole(securityUserDetail);
-        // 设定密码为空
-        securityUserDetail.getUser().setPassword(null);
         // 用户登录信息添加至本地缓存
         LocalCacheHelper.remove(securityUserDetail.getUser().getId());
         LocalCacheHelper.putJSONStr(securityUserDetail.getUser().getId(), securityUserDetail);
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
-                .authenticated(securityUserDetail, null, securityUserDetail.getAuthorities());
+                .authenticated(securityUserDetail, securityUserDetail.getUser().getPassword(), securityUserDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticated);
+        // 设定密码为空
+        securityUserDetail.getUser().setPassword(null);
         return authenticated;
     }
 
