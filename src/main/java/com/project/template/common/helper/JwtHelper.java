@@ -1,13 +1,15 @@
 package com.project.template.common.helper;
 
-import com.project.template.common.exception.MyException;
-import com.project.template.common.result.ResultCodeEnum;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Jwt辅助工具
@@ -35,19 +37,17 @@ public class JwtHelper {
      * @param realName 真实姓名
      * @return {@link String}
      */
-    public static String createToken(Long userId, Object username, Object nickname, Object realName, long tokenExpiration, String tokenSignKey) {
+    public static String createToken(Long userId, String username, String nickname, String realName, long tokenExpiration, String tokenSignKey) {
         tokenExpiration = tokenExpiration == 0 ? 24 * 60 * 60 * 1000 : tokenExpiration * 1000;
         tokenSignKey = StringUtils.isNotBlank(tokenSignKey) ? tokenSignKey : "nan1mono";
-        return Jwts.builder()
-                .setSubject("nan1mono")
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
-                .claim(USER_ID, userId)
-                .claim(USERNAME, username)
-                .claim(NICKNAME, nickname)
-                .claim(REAL_NAME, realName)
-                .signWith(SignatureAlgorithm.HS512, tokenSignKey)
-                .compressWith(CompressionCodecs.GZIP)
-                .compact();
+        return JWT.create()
+                .withSubject("nan1mono")
+                .withExpiresAt(new Date(System.currentTimeMillis() + tokenExpiration))
+                .withClaim(USER_ID, userId)
+                .withClaim(USERNAME, username)
+                .withClaim(NICKNAME, nickname)
+                .withClaim(REAL_NAME, realName)
+                .sign(Algorithm.HMAC256(tokenSignKey));
     }
 
     /**
@@ -94,18 +94,12 @@ public class JwtHelper {
      * 解密
      *
      * @param token 加密令牌
-     * @return {@link Claims}
+     * @return {@link Claim}
      */
-    private static Claims decrypt(String token, String tokenSignKey) {
-        if (StringUtils.isEmpty(token)) return new DefaultClaims();
-        Jws<Claims> claimsJws;
-        try {
-            claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
-                 IllegalArgumentException e) {
-            throw new MyException(ResultCodeEnum.FETCH_USERINFO_ERROR);
-        }
-        return claimsJws.getBody();
+    private static Map<String, Claim> decrypt(String token, String tokenSignKey) {
+        if (StringUtils.isEmpty(token)) return new HashMap<>();
+        DecodedJWT decode = JWT.decode(tokenSignKey);
+        return decode.getClaims();
     }
 
     // 仅用于测试

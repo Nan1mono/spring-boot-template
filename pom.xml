@@ -26,7 +26,7 @@
         <alibaba-fastjson2.version>2.0.40</alibaba-fastjson2.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <alibaba-easyexcel.version>3.3.2</alibaba-easyexcel.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt.version>4.4.0</jjwt.version>
         <spring-boot-starter-mail.version>2.2.6.RELEASE</spring-boot-starter-mail.version>
     </properties>
 
@@ -154,8 +154,8 @@
         </dependency>
 
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
 
