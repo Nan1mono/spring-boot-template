@@ -43,7 +43,7 @@ public class JwtHelper {
         tokenExpiration = tokenExpiration == 0 ? 24 * 60 * 60 * 1000 : tokenExpiration * 1000;
         tokenSignKey = StringUtils.isNotBlank(tokenSignKey) ? tokenSignKey : "nan1mono";
         return JWT.create()
-                .withSubject("nan1mono")
+                .withSubject(String.valueOf(userId))
                 .withExpiresAt(new Date(System.currentTimeMillis() + tokenExpiration))
                 .withClaim(USER_ID, userId)
                 .withClaim(USERNAME, username)

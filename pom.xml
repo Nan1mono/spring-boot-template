@@ -114,13 +114,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- OpenAPI3 -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.9</version>
-        </dependency>
-
         <!--　java增强API　-->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -132,12 +125,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
-        </dependency>
-
-        <!-- slf4j日志记录 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
         <!-- redis场景 -->
