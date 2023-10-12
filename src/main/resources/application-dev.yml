@@ -6,7 +6,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.66.130:3307/template_mysql8?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://192.168.66.120:3306/template_mysql8?useSSL=false&serverTimezone=UTC
     username: root
     password: 123456
   # 邮箱转发配置
@@ -39,6 +39,24 @@ springdoc:
   api-docs:
     enabled: true
 
+logging:
+  # 日志级别
+  level:
+    root: info
+  file:
+    # 日志文件名格式
+    name: ./logs/template.log
+  logback:
+    rollingpolicy:
+      # 根据文件大小归档，超过2KB自动归档，次日启动服务时也会自动归档
+      file-name-pattern: ./logs/%d{yyyyMMdd}/cmhn.out.log.%d{yyyy-MM-dd}.%i.gz
+      # 最大日志文件大小(默认为10MB，这里为了测试归档，暂时设置为2KB)
+      max-file-size: 100MB
+      # 要保留的日志备份的总大小(默认为0B)
+      total-size-cap: 1GB
+      # 保存存档日志文件的最大天数(默认为7天)
+      max-history: 20
+
 template:
   # MetaHandler控制器
   meta-handler:
@@ -52,6 +70,8 @@ template:
     sign-key: nan1mono
     # 过期时间配置(秒)
     expiration: 86400
+  security:
+    button-enable: true
 
 
 
