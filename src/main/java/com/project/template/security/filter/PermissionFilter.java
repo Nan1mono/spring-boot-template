@@ -32,7 +32,7 @@ public class PermissionFilter extends OncePerRequestFilter {
         }
         String token = request.getHeader("Authorization");
         token = token.replace("Bearer ", "");
-        Object userId = JwtHelper.getUserId(token, tokenSignKey);
+        Object userId = JwtHelper.getUserId(token);
         if (userId == null) {
             throw new MyException(ResultCodeEnum.LOGIN_AUTH);
         }

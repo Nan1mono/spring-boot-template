@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.Map;
  * 获取userName
  */
 @Component
+@Slf4j
 public class JwtHelper {
 
     public static final String USER_ID = "userId";
@@ -56,8 +58,8 @@ public class JwtHelper {
      * @param token 令牌
      * @return {@link Object}
      */
-    public static Object getUserId(String token, String tokenSignKey) {
-        return decrypt(token, tokenSignKey).get(USER_ID);
+    public static Object getUserId(String token) {
+        return decrypt(token).get(USER_ID);
     }
 
     /**
@@ -66,8 +68,8 @@ public class JwtHelper {
      * @param token 令牌
      * @return {@link Object}
      */
-    public static Object getUsername(String token, String tokenSignKey) {
-        return decrypt(token, tokenSignKey).get(USERNAME);
+    public static Object getUsername(String token) {
+        return decrypt(token).get(USERNAME);
     }
 
     /**
@@ -76,8 +78,8 @@ public class JwtHelper {
      * @param token 令牌
      * @return {@link Object}
      */
-    public static Object getNickname(String token, String tokenSignKey) {
-        return decrypt(token, tokenSignKey).get(NICKNAME);
+    public static Object getNickname(String token) {
+        return decrypt(token).get(NICKNAME);
     }
 
     /**
@@ -86,8 +88,8 @@ public class JwtHelper {
      * @param token 令 牌
      * @return {@link Object}
      */
-    public static Object getRealName(String token, String tokenSignKey) {
-        return decrypt(token, tokenSignKey).get(REAL_NAME);
+    public static Object getRealName(String token) {
+        return decrypt(token).get(REAL_NAME);
     }
 
     /**
@@ -96,21 +98,19 @@ public class JwtHelper {
      * @param token 加密令牌
      * @return {@link Claim}
      */
-    private static Map<String, Claim> decrypt(String token, String tokenSignKey) {
+    private static Map<String, Claim> decrypt(String token) {
         if (StringUtils.isEmpty(token)) return new HashMap<>();
-        DecodedJWT decode = JWT.decode(tokenSignKey);
+        DecodedJWT decode = JWT.decode(token);
         return decode.getClaims();
     }
 
     // 仅用于测试
     public static void main(String[] args) {
-//        String token = JwtHelper.createToken("1", "55");
-//        System.out.println(token);
-//        System.out.println(JwtHelper.getUserId(token));
-//        System.out.println(JwtHelper.getUserName(token));
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//        String encode = bCryptPasswordEncoder.encode("123456");
-//        System.out.println(encode);
+        String key = "123456";
+        String token = JwtHelper.createToken(1L, "lee", "nanimono", "ljc", 10000, key);
+        log.info("token = {}", token);
+        log.info("userId = {}", JwtHelper.getUserId(token));
+        log.info("nickname = {}", JwtHelper.getNickname(token));
     }
 
 }
