@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
-    @Value("${template.meta-handler.enable}")
+    @Value("${template.meta-handler.enable:true}")
     private boolean enable;
 
-    @Value("${template.meta-handler.column}")
+    @Value("${template.meta-handler.column:id}")
     private String column;
 
     @Override
