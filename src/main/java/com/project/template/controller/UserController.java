@@ -5,7 +5,7 @@ import com.project.template.model.entity.User;
 import com.project.template.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/user")
 @Tag(name = "用户模块")
+@Slf4j
 public class UserController {
 
     @Resource
@@ -28,7 +29,6 @@ public class UserController {
 
     @GetMapping("/getById")
     @Operation(summary = "根据id获取user")
-    @PreAuthorize("hasAnyAuthority('user:view')")
     public Result<User> getById(@RequestParam Long id) {
         return Result.ok(userService.getById(id));
     }
