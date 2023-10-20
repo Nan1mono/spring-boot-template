@@ -2,8 +2,10 @@ package com.project.template.common.helper;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.project.template.common.exception.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.project.template.common.result.ResultCodeEnum.FETCH_USERINFO_ERROR;
 
 /**
  * Jwt辅助工具
@@ -100,7 +104,12 @@ public class JwtHelper {
      */
     private static Map<String, Claim> decrypt(String token) {
         if (StringUtils.isEmpty(token)) return new HashMap<>();
-        DecodedJWT decode = JWT.decode(token);
+        DecodedJWT decode = null;
+        try {
+            decode = JWT.decode(token);
+        } catch (JWTDecodeException e) {
+            throw new MyException(FETCH_USERINFO_ERROR);
+        }
         return decode.getClaims();
     }
 
