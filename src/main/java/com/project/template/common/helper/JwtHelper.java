@@ -3,6 +3,7 @@ package com.project.template.common.helper;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.project.template.security.exception.LoginException;
@@ -44,8 +45,7 @@ public class JwtHelper {
      * @return {@link String}
      */
     public static String createToken(Long userId, String username, String nickname, String realName, long tokenExpiration, String tokenSignKey) {
-        tokenExpiration = tokenExpiration == 0 ? 24 * 60 * 60 * 1000 : tokenExpiration * 1000;
-        tokenSignKey = StringUtils.isNotBlank(tokenSignKey) ? tokenSignKey : "nan1mono";
+        tokenExpiration = tokenExpiration * 1000;
         return JWT.create()
                 .withSubject(String.valueOf(userId))
                 .withExpiresAt(new Date(System.currentTimeMillis() + tokenExpiration))
@@ -107,7 +107,8 @@ public class JwtHelper {
         DecodedJWT decode = null;
         try {
             decode = JWT.decode(token);
-        } catch (JWTDecodeException e) {
+        } catch (JWTDecodeException | TokenExpiredException exception) {
+            // 用于校验token合法性以及token是否过期
             throw new LoginException(FETCH_USERINFO_ERROR);
         }
         return decode.getClaims();

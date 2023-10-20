@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 @Service
 public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
-    @Value("${template.token.expiration}")
+    @Value("${template.token.expiration:25200}")
     private long tokenExpiration;
 
-    @Value("${template.token.sign-key}")
+    @Value("${template.token.sign-key:nan1mono}")
     private String tokenSignKey;
 
-    @Value("${template.security.button-enable}")
+    @Value("${template.security.button-enable:true}")
     private Boolean isFind;
 
     @Resource
