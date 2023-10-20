@@ -14,6 +14,7 @@ import com.project.template.security.entity.SecurityUserRole;
 import com.project.template.security.enums.LoginEnum;
 import com.project.template.security.exception.LoginException;
 import com.project.template.service.UserService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -43,6 +44,15 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     @Value("${template.security.button-enable:true}")
     private Boolean isFind;
+
+    @Value("${template.pass-error.enable:false}")
+    private Boolean isCheckLock;
+
+    @Value("${template.pass-error.times:5}")
+    private Integer times;
+
+    @Value("${template.pass-error.lock-minute:15}")
+    private Long minute;
 
     @Resource
     private UserButtonMapper userButtonMapper;
@@ -78,7 +88,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 检查账户是否被锁定
         if (user.getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
             LocalDateTime lockDatetime = user.getLockDatetime();
-            // 如果当前时间已经超过解锁时间，则自动解锁，并清空解锁时间，否则提示已锁定和解锁时间
+            // 如果当前时间已经超过解锁时间，则自动解锁并清空解锁时间，同时清楚缓存中的试错计数，否则提示已锁定和解锁时间
             LocalDateTime now = LocalDateTime.now();
             if (now.isAfter(lockDatetime)) {
                 userService.lambdaUpdate()
@@ -86,6 +96,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                         .set(User::getIsLocked, UserStatusEnum.UN_LOCKED)
                         .set(User::getLockDatetime, null)
                         .update();
+                LocalCacheHelper.remove(this.getUserErrorPassLockNumKey(user.getId()));
             } else {
                 String lockMsg =
                         lockDatetime == null ?
@@ -131,6 +142,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                 this.retrieveUser(username, (UsernamePasswordAuthenticationToken) authentication);
         // 匹配密码
         if (!presentedPassword.equals(securityUserDetail.getPassword())) {
+            this.checkLock(isCheckLock, securityUserDetail.getUser());
             throw new LoginException(LoginEnum.PASSWORD_ERROR);
         }
         // 校验其他规则
@@ -191,5 +203,40 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     private List<String> findUserPermission(List<Long> roleIdList) {
         return rolePermissionMapper.findUserPermission(roleIdList);
+    }
+
+    private void checkLock(boolean isCheck, User user) {
+        if (!isCheck) {
+            return;
+        }
+        // 如果账号已经锁定，则不需要在进行锁定检查了
+        if (user.getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
+            return;
+        }
+        String userErrorPassLockNumKey = this.getUserErrorPassLockNumKey(user.getId());
+        // 获取登录错误计数
+        Object lockNumObject = LocalCacheHelper.getIfPresent(userErrorPassLockNumKey);
+        int lockCount = 0;
+        if (ObjectUtils.isNotEmpty(lockNumObject)) {
+            lockCount = Integer.parseInt(lockNumObject.toString());
+        }
+        // 判断是否已达设定的上限，如果未达上限，仅需增加试错次数
+        if (lockCount < times) {
+            lockCount += 1;
+            LocalCacheHelper.put(userErrorPassLockNumKey, lockCount);
+            return;
+        }
+        // 如果已达上限则需要更新用户信息，包括数据库信息
+        user.setIsLocked(UserStatusEnum.LOCKED.getCode());
+        user.setLockDatetime(LocalDateTime.now().plusMinutes(minute));
+        userService.lambdaUpdate()
+                .eq(User::getId, user.getId())
+                .set(User::getIsLocked, user.getIsLocked())
+                .set(User::getLockDatetime, user.getLockDatetime())
+                .update();
+    }
+
+    private String getUserErrorPassLockNumKey(Long userId) {
+        return "user:error-pass:error-num:" + userId;
     }
 }

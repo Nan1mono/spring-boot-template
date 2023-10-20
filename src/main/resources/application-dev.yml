@@ -76,6 +76,14 @@ template:
     # 路由白名单配置
     allow:
       uri: /v3/api-docs/**,/swagger-ui/**,/test/**,/doc.html,/login/auth
+  # 密码试错设定
+  pass-error:
+    # 是否开启试错限制
+    enable: true
+    # 试错次数
+    times: 10
+    # 试错上限锁定时间（分钟）
+    lock-minute: 10
 
 
 
