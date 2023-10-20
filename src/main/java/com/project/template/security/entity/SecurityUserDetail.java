@@ -93,4 +93,35 @@ public class SecurityUserDetail implements UserDetails {
     public boolean isEnabled() {
         return this.user.getStatus().equals(UserStatusEnum.ENABLE.getCode());
     }
+
+    public String getUserInfo(String column) {
+        UserColumn userColumn = UserColumn.valueOf(column.toUpperCase());
+        switch (userColumn) {
+            case USER_ID:
+                return String.valueOf(this.user.getId());
+            case NICKNAME:
+                return this.user.getNickname();
+            case REAL_NAME:
+                return this.user.getRealName();
+            case USERNAME:
+                return this.user.getUsername();
+            default:
+                return "";
+        }
+    }
+
+    @Getter
+    enum UserColumn {
+        USER_ID("user_id"),
+        NICKNAME("nickname"),
+        REAL_NAME("real_name"),
+        USERNAME("username"),
+        ;
+
+        private final String column;
+
+        UserColumn(String column) {
+            this.column = column;
+        }
+    }
 }
