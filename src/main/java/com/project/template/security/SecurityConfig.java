@@ -1,9 +1,9 @@
 package com.project.template.security;
 
-import com.project.template.common.exception.MyException;
-import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityUserDetail;
+import com.project.template.security.enums.LoginEnum;
+import com.project.template.security.exception.LoginException;
 import com.project.template.security.filter.PermissionFilter;
 import com.project.template.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -75,7 +75,7 @@ public class SecurityConfig {
             if (user != null) {
                 return new SecurityUserDetail(user);
             }
-            throw new MyException(ResultCodeEnum.PASSWORD_ERROR);
+            throw new LoginException(LoginEnum.PASSWORD_ERROR);
         };
     }
 

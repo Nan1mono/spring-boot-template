@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.project.template.common.exception.MyException;
+import com.project.template.security.exception.LoginException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.project.template.common.result.ResultCodeEnum.FETCH_USERINFO_ERROR;
+import static com.project.template.security.enums.LoginEnum.FETCH_USERINFO_ERROR;
 
 /**
  * Jwt辅助工具
@@ -108,7 +108,7 @@ public class JwtHelper {
         try {
             decode = JWT.decode(token);
         } catch (JWTDecodeException e) {
-            throw new MyException(FETCH_USERINFO_ERROR);
+            throw new LoginException(FETCH_USERINFO_ERROR);
         }
         return decode.getClaims();
     }

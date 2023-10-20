@@ -1,9 +1,7 @@
 package com.project.template.security.provider;
 
-import com.project.template.common.exception.MyException;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
-import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.mapper.RoleMenuMapper;
 import com.project.template.mapper.RolePermissionMapper;
 import com.project.template.mapper.UserButtonMapper;
@@ -12,6 +10,8 @@ import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityRoleMenu;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.entity.SecurityUserRole;
+import com.project.template.security.enums.LoginEnum;
+import com.project.template.security.exception.LoginException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -73,7 +73,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         if (pwdExpirationTime != null) {
             boolean before = pwdExpirationTime.isBefore(LocalDateTime.now());
             if (!before) {
-                throw new MyException(ResultCodeEnum.PASSWORD_EXPIRATION);
+                throw new LoginException(LoginEnum.PASSWORD_EXPIRATION);
             }
         }
     }
@@ -104,7 +104,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                 this.retrieveUser(username, (UsernamePasswordAuthenticationToken) authentication);
         // 匹配密码
         if (!presentedPassword.equals(securityUserDetail.getPassword())) {
-            throw new MyException(ResultCodeEnum.PASSWORD_ERROR);
+            throw new LoginException(LoginEnum.PASSWORD_ERROR);
         }
         // 校验其他规则
         this.additionalAuthenticationChecks(securityUserDetail, (UsernamePasswordAuthenticationToken) authentication);

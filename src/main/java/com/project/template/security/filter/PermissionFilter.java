@@ -1,13 +1,14 @@
 package com.project.template.security.filter;
 
-import com.project.template.common.exception.MyException;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
-import com.project.template.common.result.ResultCodeEnum;
 import com.project.template.security.entity.SecurityUserDetail;
+import com.project.template.security.enums.LoginEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -40,16 +41,25 @@ public class PermissionFilter extends OncePerRequestFilter {
             return;
         }
         String token = request.getHeader("Authorization");
+        // 验证token是否存在
+        if (StringUtils.isBlank(token)) {
+            throw new BadCredentialsException(LoginEnum.LOGIN_AUTH.getMessage());
+        }
         token = token.replace("Bearer ", "");
         Object userId = JwtHelper.getUserId(token);
         if (userId == null) {
-            throw new MyException(ResultCodeEnum.LOGIN_AUTH);
+            throw new BadCredentialsException(LoginEnum.LOGIN_AUTH.getMessage());
         }
+        // 验证缓存token
         Object value = LocalCacheHelper.getIfPresent(Long.valueOf(userId.toString()));
         if (value == null) {
-            throw new MyException(ResultCodeEnum.LOGIN_AUTH);
+            throw new BadCredentialsException(LoginEnum.LOGIN_AUTH.getMessage());
         }
         SecurityUserDetail userDetail = (SecurityUserDetail) value;
+        // 验证token是否匹配
+        if (!userDetail.getToken().equals(token)) {
+            throw new BadCredentialsException(LoginEnum.LOGIN_EXPIRATION.getMessage());
+        }
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
                 .authenticated(userDetail, userDetail.getUser().getPassword(), userDetail.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticated);
