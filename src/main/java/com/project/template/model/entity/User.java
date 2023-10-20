@@ -57,4 +57,12 @@ public class User extends BaseEntity {
     @Schema(description = "状态 1启用 0停用")
     @TableField("status")
     private Integer status;
+
+    @Schema(description = "是否被锁定 0锁定 1锁定")
+    @TableField("is_locked")
+    private Integer isLocked;
+
+    @Schema(description = "账号锁定到期时间，空代表永久锁定")
+    @TableField("lock_datetime")
+    private LocalDateTime lockDatetime;
 }
