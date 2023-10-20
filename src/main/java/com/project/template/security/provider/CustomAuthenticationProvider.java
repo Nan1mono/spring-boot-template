@@ -1,5 +1,6 @@
 package com.project.template.security.provider;
 
+import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.mapper.RoleMenuMapper;
@@ -12,6 +13,7 @@ import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.entity.SecurityUserRole;
 import com.project.template.security.enums.LoginEnum;
 import com.project.template.security.exception.LoginException;
+import com.project.template.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +59,9 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     @Resource
     private RolePermissionMapper rolePermissionMapper;
 
+    @Resource
+    private UserService userService;
+
     /**
      * 其他身份验证检查
      *
@@ -69,6 +75,27 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         SecurityUserDetail securityUserDetail = (SecurityUserDetail) userDetails;
         User user = securityUserDetail.getUser();
         LocalDateTime pwdExpirationTime = user.getPwdExpirationTime();
+        // 检查账户是否被锁定
+        if (user.getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
+            LocalDateTime lockDatetime = user.getLockDatetime();
+            // 如果当前时间已经超过解锁时间，则自动解锁，并清空解锁时间，否则提示已锁定和解锁时间
+            LocalDateTime now = LocalDateTime.now();
+            if (now.isAfter(lockDatetime)) {
+                userService.lambdaUpdate()
+                        .eq(User::getId, user.getId())
+                        .set(User::getIsLocked, UserStatusEnum.UN_LOCKED)
+                        .set(User::getLockDatetime, null)
+                        .update();
+            } else {
+                String lockMsg =
+                        lockDatetime == null ?
+                                "您的账户已被永久锁定，如果疑问请联系管理员" :
+                                "您的账号被锁定至 "
+                                        + lockDatetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                                        + " ，如果有疑问请联系管理员";
+                throw new LoginException(lockMsg, 400);
+            }
+        }
         // 如果时间存在，则代表存在过期时间
         if (pwdExpirationTime != null) {
             boolean before = pwdExpirationTime.isBefore(LocalDateTime.now());
