@@ -93,18 +93,12 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
             if (now.isAfter(lockDatetime)) {
                 userService.lambdaUpdate()
                         .eq(User::getId, user.getId())
-                        .set(User::getIsLocked, UserStatusEnum.UN_LOCKED)
+                        .set(User::getIsLocked, UserStatusEnum.UN_LOCKED.getCode())
                         .set(User::getLockDatetime, null)
                         .update();
                 LocalCacheHelper.remove(this.getUserErrorPassLockNumKey(user.getId()));
             } else {
-                String lockMsg =
-                        lockDatetime == null ?
-                                "您的账户已被永久锁定，如果疑问请联系管理员" :
-                                "您的账号被锁定至 "
-                                        + lockDatetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                                        + " ，如果有疑问请联系管理员";
-                throw new LoginException(lockMsg, 400);
+                throw new LoginException(this.lockMsg(lockDatetime), 400);
             }
         }
         // 如果时间存在，则代表存在过期时间
@@ -142,7 +136,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                 this.retrieveUser(username, (UsernamePasswordAuthenticationToken) authentication);
         // 匹配密码
         if (!presentedPassword.equals(securityUserDetail.getPassword())) {
-            this.checkLock(isCheckLock, securityUserDetail.getUser());
+            this.countPassErrorTimes(isCheckLock, securityUserDetail.getUser());
             throw new LoginException(LoginEnum.PASSWORD_ERROR);
         }
         // 校验其他规则
@@ -205,13 +199,13 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         return rolePermissionMapper.findUserPermission(roleIdList);
     }
 
-    private void checkLock(boolean isCheck, User user) {
+    private void countPassErrorTimes(boolean isCheck, User user) {
         if (!isCheck) {
             return;
         }
         // 如果账号已经锁定，则不需要在进行锁定检查了
         if (user.getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
-            return;
+            throw new LoginException(this.lockMsg(user.getLockDatetime()), 400);
         }
         String userErrorPassLockNumKey = this.getUserErrorPassLockNumKey(user.getId());
         // 获取登录错误计数
@@ -238,5 +232,13 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     private String getUserErrorPassLockNumKey(Long userId) {
         return "user:error-pass:error-num:" + userId;
+    }
+
+    private String lockMsg(LocalDateTime lockDatetime) {
+        return lockDatetime == null ?
+                "您的账户已被永久锁定，如果疑问请联系管理员" :
+                "您的账号被锁定至 "
+                        + lockDatetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                        + "，如果有疑问请联系管理员";
     }
 }
