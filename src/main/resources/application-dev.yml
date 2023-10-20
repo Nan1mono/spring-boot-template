@@ -73,6 +73,7 @@ template:
   security:
     # 是否开启按钮查询权限
     button-enable: true
+    # 路由白名单配置
     allow:
       uri: /v3/api-docs/**,/swagger-ui/**,/test/**,/doc.html,/login/auth
 

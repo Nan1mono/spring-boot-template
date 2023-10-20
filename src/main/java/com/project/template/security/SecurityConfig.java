@@ -75,7 +75,7 @@ public class SecurityConfig {
             if (user != null) {
                 return new SecurityUserDetail(user);
             }
-            throw new LoginException(LoginEnum.PASSWORD_ERROR);
+            throw new LoginException(LoginEnum.FETCH_USERINFO_ERROR);
         };
     }
 
