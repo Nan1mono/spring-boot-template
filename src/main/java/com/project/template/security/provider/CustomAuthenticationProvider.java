@@ -98,7 +98,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                         .update();
                 LocalCacheHelper.remove(this.getUserErrorPassLockNumKey(user.getId()));
             } else {
-                throw new LoginException(this.lockMsg(lockDatetime), 400);
+                throw new LoginException(lockMsg(lockDatetime), 400);
             }
         }
         // 如果时间存在，则代表存在过期时间
@@ -205,7 +205,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         }
         // 如果账号已经锁定，则不需要在进行锁定检查了
         if (user.getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
-            throw new LoginException(this.lockMsg(user.getLockDatetime()), 400);
+            throw new LoginException(lockMsg(user.getLockDatetime()), 400);
         }
         String userErrorPassLockNumKey = this.getUserErrorPassLockNumKey(user.getId());
         // 获取登录错误计数
@@ -234,7 +234,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         return "user:error-pass:error-num:" + userId;
     }
 
-    private String lockMsg(LocalDateTime lockDatetime) {
+    public static String lockMsg(LocalDateTime lockDatetime) {
         return lockDatetime == null ?
                 "您的账户已被永久锁定，如果疑问请联系管理员" :
                 "您的账号被锁定至 "

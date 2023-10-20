@@ -1,9 +1,11 @@
 package com.project.template.security.filter;
 
+import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.enums.LoginEnum;
+import com.project.template.security.provider.CustomAuthenticationProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -59,6 +61,10 @@ public class PermissionFilter extends OncePerRequestFilter {
         // 验证token是否匹配
         if (!userDetail.getToken().equals(token)) {
             throw new BadCredentialsException(LoginEnum.LOGIN_EXPIRATION.getMessage());
+        }
+        // 验证用户是否被锁定
+        if (userDetail.getUser().getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
+            throw new BadCredentialsException(CustomAuthenticationProvider.lockMsg(userDetail.getUser().getLockDatetime()));
         }
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
                 .authenticated(userDetail, userDetail.getUser().getPassword(), userDetail.getAuthorities());
