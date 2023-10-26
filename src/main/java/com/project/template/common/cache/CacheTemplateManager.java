@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,8 +22,11 @@ public abstract class CacheTemplateManager {
     @Resource
     private SpringBeanUtils springBeanUtils;
 
+    @Value("${template.cache.configuration.type:redis}")
+    private String type;
 
-    public CacheTemplateManager createManager(String type) {
+
+    public CacheTemplateManager createManager() {
         log.info("当前启动的缓存类型为：{}", type);
         if ("redis".equals(type)) {
             return new RedisCacheManager(springBeanUtils.getBean(RedisUtils.class));

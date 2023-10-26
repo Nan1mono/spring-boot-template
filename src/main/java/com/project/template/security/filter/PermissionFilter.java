@@ -32,9 +32,6 @@ public class PermissionFilter extends OncePerRequestFilter {
     @Value("${template.security.allow.uri}")
     private List<String> uri;
 
-    @Value("${template.cache.configuration.type:redis}")
-    private String cacheType;
-
     @Resource
     private CacheTemplateManager cacheTemplateManager;
 
@@ -45,7 +42,7 @@ public class PermissionFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         // 初始化缓存管理器
-        cacheTemplateManager = cacheTemplateManager.createManager(cacheType);
+        cacheTemplateManager = cacheTemplateManager.createManager();
         // 路由白名单过滤
         if (request.getMethod().equals(HttpMethod.OPTIONS.name()) || uri.stream().anyMatch(t -> matcher.match(t, request.getRequestURI()))) {
             filterChain.doFilter(request, response);

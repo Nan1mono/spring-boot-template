@@ -81,7 +81,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     @PostConstruct
     public void initCacheManager() {
-        cacheTemplateManager = cacheTemplateManager.createManager(cacheType);
+        cacheTemplateManager = cacheTemplateManager.createManager();
     }
 
     /**
