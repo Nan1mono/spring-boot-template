@@ -84,6 +84,11 @@ template:
     times: 10
     # 试错上限锁定时间（分钟）
     lock-minute: 10
+  # 缓存设置
+  cache:
+    configuration:
+      # 缓存类型：redis or local
+      type: local
 
 
 

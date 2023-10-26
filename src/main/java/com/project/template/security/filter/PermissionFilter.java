@@ -1,8 +1,8 @@
 package com.project.template.security.filter;
 
+import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
-import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.enums.LoginFailEnum;
 import com.project.template.security.provider.CustomAuthenticationProvider;
@@ -18,6 +18,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +32,20 @@ public class PermissionFilter extends OncePerRequestFilter {
     @Value("${template.security.allow.uri}")
     private List<String> uri;
 
+    @Value("${template.cache.configuration.type:redis}")
+    private String cacheType;
+
+    @Resource
+    private CacheTemplateManager cacheTemplateManager;
+
     private final PathMatcher matcher = new AntPathMatcher();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
+        // 初始化缓存管理器
+        cacheTemplateManager = cacheTemplateManager.createManager(cacheType);
         // 路由白名单过滤
         if (request.getMethod().equals(HttpMethod.OPTIONS.name()) || uri.stream().anyMatch(t -> matcher.match(t, request.getRequestURI()))) {
             filterChain.doFilter(request, response);
@@ -53,7 +62,7 @@ public class PermissionFilter extends OncePerRequestFilter {
             throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
         // 验证缓存token
-        Object value = LocalCacheHelper.getIfPresent(Long.valueOf(userId.toString()));
+        Object value = cacheTemplateManager.getIfPresent(Long.valueOf(userId.toString()));
         if (value == null) {
             throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }

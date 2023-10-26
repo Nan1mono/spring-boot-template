@@ -1,10 +1,11 @@
 package com.project.template.common.cache.impl;
 
 
-import com.project.template.common.cache.CacheManager;
+import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.helper.LocalCacheHelper;
 
-public class LocalCacheManager implements CacheManager {
+
+public class LocalCacheManager extends CacheTemplateManager {
     @Override
     public void put(Object key, Object value) {
         LocalCacheHelper.put(key, value);

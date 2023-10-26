@@ -1,8 +1,8 @@
 package com.project.template.security.provider;
 
+import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
-import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.mapper.RoleMenuMapper;
 import com.project.template.mapper.RolePermissionMapper;
 import com.project.template.mapper.UserButtonMapper;
@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +55,9 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     @Value("${template.pass-error.lock-minute:15}")
     private Long minute;
 
+    @Value("${template.cache.configuration.type:redis}")
+    private String cacheType;
+
     @Resource
     private UserButtonMapper userButtonMapper;
 
@@ -71,6 +75,14 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private CacheTemplateManager cacheTemplateManager;
+
+    @PostConstruct
+    public void initCacheManager() {
+        cacheTemplateManager = cacheTemplateManager.createManager(cacheType);
+    }
 
     /**
      * 其他身份验证检查
@@ -96,7 +108,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                         .set(User::getIsLocked, UserStatusEnum.UN_LOCKED.getCode())
                         .set(User::getLockDatetime, null)
                         .update();
-                LocalCacheHelper.remove(this.getUserErrorPassLockNumKey(user.getId()));
+                cacheTemplateManager.remove(this.getUserErrorPassLockNumKey(user.getId()));
             } else {
                 throw new LoginException(lockMsg(lockDatetime), 400);
             }
@@ -150,8 +162,8 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 检索用户对应的角色集合
         findUserRole(securityUserDetail);
         // 用户登录信息添加至本地缓存
-        LocalCacheHelper.remove(securityUserDetail.getUser().getId());
-        LocalCacheHelper.put(securityUserDetail.getUser().getId(), securityUserDetail);
+        cacheTemplateManager.remove(securityUserDetail.getUser().getId());
+        cacheTemplateManager.put(securityUserDetail.getUser().getId(), securityUserDetail);
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
                 .authenticated(securityUserDetail,
                         securityUserDetail.getUser().getPassword(), securityUserDetail.getAuthorities());
@@ -209,7 +221,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         }
         String userErrorPassLockNumKey = this.getUserErrorPassLockNumKey(user.getId());
         // 获取登录错误计数
-        Object lockNumObject = LocalCacheHelper.getIfPresent(userErrorPassLockNumKey);
+        Object lockNumObject = cacheTemplateManager.getIfPresent(userErrorPassLockNumKey);
         int lockCount = 0;
         if (ObjectUtils.isNotEmpty(lockNumObject)) {
             lockCount = Integer.parseInt(lockNumObject.toString());
@@ -217,7 +229,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 判断是否已达设定的上限，如果未达上限，仅需增加试错次数
         if (lockCount < times) {
             lockCount += 1;
-            LocalCacheHelper.put(userErrorPassLockNumKey, lockCount);
+            cacheTemplateManager.put(userErrorPassLockNumKey, lockCount);
             return;
         }
         // 如果已达上限则需要更新用户信息，包括数据库信息

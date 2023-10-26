@@ -1,20 +1,29 @@
 package com.project.template.common.cache.impl;
 
 import com.alibaba.fastjson2.JSON;
-import com.project.template.common.cache.CacheManager;
+import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.util.RedisUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.List;
 
-@Service
-public class RedisCacheManager implements CacheManager {
+@Component
+public class RedisCacheManager extends CacheTemplateManager {
 
-    @Resource
-    private RedisUtils redisUtils;
+    private final RedisUtils redisUtils;
+
+    /**
+     * 构造器注入RedisUtils
+     *
+     * @param redisUtils 缓存工具
+     */
+    @Autowired
+    public RedisCacheManager(RedisUtils redisUtils) {
+        this.redisUtils = redisUtils;
+    }
 
     @Override
     public void put(Object key, Object value) {
