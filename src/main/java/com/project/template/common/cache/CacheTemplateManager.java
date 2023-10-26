@@ -22,7 +22,7 @@ public abstract class CacheTemplateManager {
     @Resource
     private SpringBeanUtils springBeanUtils;
 
-    @Value("${template.cache.configuration.type:redis}")
+    @Value("${template.cache.configuration.type:local}")
     private String type;
 
 

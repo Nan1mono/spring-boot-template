@@ -124,4 +124,8 @@ public class SecurityUserDetail implements UserDetails {
             this.column = column;
         }
     }
+
+    public static String getUserCacheKey(Object userId) {
+        return "template:login:user:" + userId;
+    }
 }

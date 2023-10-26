@@ -162,8 +162,8 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 检索用户对应的角色集合
         findUserRole(securityUserDetail);
         // 用户登录信息添加至本地缓存
-        cacheTemplateManager.remove(securityUserDetail.getUser().getId());
-        cacheTemplateManager.put(securityUserDetail.getUser().getId(), securityUserDetail);
+        cacheTemplateManager.remove(SecurityUserDetail.getUserCacheKey(securityUserDetail.getUser().getId()));
+        cacheTemplateManager.put(SecurityUserDetail.getUserCacheKey(securityUserDetail.getUser().getId()), securityUserDetail);
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
                 .authenticated(securityUserDetail,
                         securityUserDetail.getUser().getPassword(), securityUserDetail.getAuthorities());

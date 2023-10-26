@@ -20,6 +20,11 @@ spring:
   config:
     activate:
       on-profile: dev
+  # redis
+  redis:
+    host: 192.168.66.120
+    port: 6379
+    password: 123456
 
 
 mybatis-plus:
@@ -87,8 +92,8 @@ template:
   # 缓存设置
   cache:
     configuration:
-      # 缓存类型：redis or local
-      type: local
+      # 缓存类型：redis or local，默认使用本地缓存
+      type: redis
 
 
 

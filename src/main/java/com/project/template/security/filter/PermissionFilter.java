@@ -59,7 +59,7 @@ public class PermissionFilter extends OncePerRequestFilter {
             throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
         // 验证缓存token
-        Object value = cacheTemplateManager.getIfPresent(Long.valueOf(userId.toString()));
+        Object value = cacheTemplateManager.getIfPresent(SecurityUserDetail.getUserCacheKey(userId));
         if (value == null) {
             throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
