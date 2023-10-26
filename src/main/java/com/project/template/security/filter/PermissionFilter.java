@@ -4,7 +4,7 @@ import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.common.helper.LocalCacheHelper;
 import com.project.template.security.entity.SecurityUserDetail;
-import com.project.template.security.enums.LoginEnum;
+import com.project.template.security.enums.LoginFailEnum;
 import com.project.template.security.provider.CustomAuthenticationProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,22 +45,22 @@ public class PermissionFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
         // 验证token是否存在
         if (StringUtils.isBlank(token)) {
-            throw new BadCredentialsException(LoginEnum.LOGIN_AUTH.getMessage());
+            throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
         token = token.replace("Bearer ", "");
         Object userId = JwtHelper.getUserId(token);
         if (userId == null) {
-            throw new BadCredentialsException(LoginEnum.LOGIN_AUTH.getMessage());
+            throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
         // 验证缓存token
         Object value = LocalCacheHelper.getIfPresent(Long.valueOf(userId.toString()));
         if (value == null) {
-            throw new BadCredentialsException(LoginEnum.LOGIN_AUTH.getMessage());
+            throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
         SecurityUserDetail userDetail = (SecurityUserDetail) value;
         // 验证token是否匹配
         if (!userDetail.getToken().equals(token)) {
-            throw new BadCredentialsException(LoginEnum.LOGIN_EXPIRATION.getMessage());
+            throw new BadCredentialsException(LoginFailEnum.LOGIN_EXPIRATION.getMessage());
         }
         // 验证用户是否被锁定
         if (userDetail.getUser().getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {

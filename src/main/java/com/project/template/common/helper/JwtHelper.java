@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.project.template.security.enums.LoginEnum.FETCH_USERINFO_ERROR;
+import static com.project.template.security.enums.LoginFailEnum.FETCH_USERINFO_ERROR;
 
 /**
  * Jwt辅助工具

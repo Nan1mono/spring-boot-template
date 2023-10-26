@@ -2,7 +2,7 @@ package com.project.template.security;
 
 import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityUserDetail;
-import com.project.template.security.enums.LoginEnum;
+import com.project.template.security.enums.LoginFailEnum;
 import com.project.template.security.exception.LoginException;
 import com.project.template.security.filter.PermissionFilter;
 import com.project.template.service.UserService;
@@ -75,7 +75,7 @@ public class SecurityConfig {
             if (user != null) {
                 return new SecurityUserDetail(user);
             }
-            throw new LoginException(LoginEnum.FETCH_USERINFO_ERROR);
+            throw new LoginException(LoginFailEnum.FETCH_USERINFO_ERROR);
         };
     }
 
