@@ -9,22 +9,16 @@ spring:
     url: jdbc:mysql://192.168.66.120:3306/template_mysql8?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
     username: root
     password: 123456
-  # 邮箱转发配置
-  mail:
-    username: 1174752357@qq.com
-    password: qxpnolhjayulhhif
-    host: smtp.qq.com
-    default-encoding: UTF-8
-    port: 587
   # 配置中心
   config:
     activate:
       on-profile: dev
   # redis
-  redis:
-    host: 192.168.66.120
-    port: 6379
-    password: 123456
+  data:
+    redis:
+      password: 123456
+      port: 6379
+      host: 192.168.66.120
 
 
 mybatis-plus:
@@ -39,10 +33,10 @@ mybatis-plus:
 knife4j:
   enable: true
   production: false
-
-springdoc:
-  api-docs:
-    enabled: true
+#
+#springdoc:
+#  api-docs:
+#    enabled: true
 
 logging:
   # 日志级别

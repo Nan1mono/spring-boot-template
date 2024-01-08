@@ -1,5 +1,8 @@
 package com.project.template.common.cache.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum CacheFailEnums {
 
     FAIL(300, "缓存出现异常"),

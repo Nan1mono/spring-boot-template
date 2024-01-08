@@ -1,4 +1,4 @@
-package com.project.template.common.bean;
+package com.project.template.common.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

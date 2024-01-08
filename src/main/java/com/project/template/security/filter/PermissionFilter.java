@@ -6,7 +6,12 @@ import com.project.template.common.helper.JwtHelper;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.enums.LoginFailEnum;
 import com.project.template.security.provider.CustomAuthenticationProvider;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
@@ -18,11 +23,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,10 +32,14 @@ public class PermissionFilter extends OncePerRequestFilter {
     @Value("${template.security.allow.uri}")
     private List<String> uri;
 
-    @Resource
     private CacheTemplateManager cacheTemplateManager;
 
     private final PathMatcher matcher = new AntPathMatcher();
+
+    @Autowired
+    public PermissionFilter(CacheTemplateManager cacheTemplateManager) {
+        this.cacheTemplateManager = cacheTemplateManager;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

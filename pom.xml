@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.16</version>
+        <version>3.2.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,16 +18,15 @@
     <!-- 环境控制 -->
     <properties>
         <java.version>11</java.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.5.3.2</mybatis-plus-generator.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.5.5</mybatis-plus-generator.version>
         <velocity-engine.version>2.3</velocity-engine.version>
-        <mysql-connector.version>8.0.12</mysql-connector.version>
+        <mysql-connector.version>8.0.33</mysql-connector.version>
         <alibaba-druid.version>1.1.22</alibaba-druid.version>
         <alibaba-fastjson2.version>2.0.40</alibaba-fastjson2.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <alibaba-easyexcel.version>3.3.2</alibaba-easyexcel.version>
+        <alibaba-easyexcel.version>3.3.3</alibaba-easyexcel.version>
         <jjwt.version>4.4.0</jjwt.version>
-        <spring-boot-starter-mail.version>2.2.6.RELEASE</spring-boot-starter-mail.version>
     </properties>
 
     <dependencies>
@@ -46,11 +45,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-spring-boot3-starter -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -141,6 +142,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.21</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>${jjwt.version}</version>
@@ -150,13 +157,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
-            <version>${spring-boot-starter-mail.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.3.0</version>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
         </dependency>
 
         <dependency>

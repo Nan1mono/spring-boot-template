@@ -1,29 +1,35 @@
 package com.project.template.common.cache;
 
 import com.alibaba.fastjson2.JSON;
-import com.project.template.common.bean.SpringBeanUtils;
+import com.project.template.common.util.SpringBeanUtils;
 import com.project.template.common.cache.impl.LocalCacheManager;
 import com.project.template.common.cache.impl.RedisCacheManager;
 import com.project.template.common.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 @Component
 @Qualifier("cacheTemplateManager")
 @Slf4j
 public abstract class CacheTemplateManager {
 
-    @Resource
     private SpringBeanUtils springBeanUtils;
 
     @Value("${template.cache.configuration.type:local}")
     private String type;
+
+    protected CacheTemplateManager() {
+    }
+
+    @Autowired
+    protected CacheTemplateManager(SpringBeanUtils springBeanUtils) {
+        this.springBeanUtils = springBeanUtils;
+    }
 
 
     public CacheTemplateManager createManager() {

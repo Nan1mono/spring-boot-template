@@ -22,6 +22,7 @@ public class RedisCacheManager extends CacheTemplateManager {
      */
     @Autowired
     public RedisCacheManager(RedisUtils redisUtils) {
+        super();
         this.redisUtils = redisUtils;
     }
 

@@ -6,6 +6,10 @@ import com.project.template.common.helper.LocalCacheHelper;
 
 
 public class LocalCacheManager extends CacheTemplateManager {
+    public LocalCacheManager() {
+        super();
+    }
+
     @Override
     public void put(Object key, Object value) {
         LocalCacheHelper.put(key, value);

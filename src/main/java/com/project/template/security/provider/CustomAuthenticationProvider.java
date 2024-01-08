@@ -24,8 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -58,31 +56,40 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     @Value("${template.cache.configuration.type:redis}")
     private String cacheType;
 
-    @Resource
-    private UserButtonMapper userButtonMapper;
+    private final UserButtonMapper userButtonMapper;
 
-    @Resource
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    @Resource
-    private UserRoleMapper userRoleMapper;
+    private final UserRoleMapper userRoleMapper;
 
-    @Resource
-    private RoleMenuMapper roleMenuMapper;
+    private final RoleMenuMapper roleMenuMapper;
 
-    @Resource
-    private RolePermissionMapper rolePermissionMapper;
+    private final RolePermissionMapper rolePermissionMapper;
 
-    @Resource
-    private UserService userService;
+    private final UserService userService;
 
-    @Resource
     private CacheTemplateManager cacheTemplateManager;
 
-    @PostConstruct
+    public CustomAuthenticationProvider(UserButtonMapper userButtonMapper,
+                                        UserDetailsService userDetailsService,
+                                        UserRoleMapper userRoleMapper,
+                                        RoleMenuMapper roleMenuMapper,
+                                        RolePermissionMapper rolePermissionMapper,
+                                        UserService userService,
+                                        CacheTemplateManager cacheTemplateManager) {
+        this.userButtonMapper = userButtonMapper;
+        this.userDetailsService = userDetailsService;
+        this.userRoleMapper = userRoleMapper;
+        this.roleMenuMapper = roleMenuMapper;
+        this.rolePermissionMapper = rolePermissionMapper;
+        this.userService = userService;
+        this.cacheTemplateManager = cacheTemplateManager;
+    }
+
     public void initCacheManager() {
         cacheTemplateManager = cacheTemplateManager.createManager();
     }
+
 
     /**
      * 其他身份验证检查
