@@ -40,6 +40,14 @@ knife4j:
 
 
 template:
+  # logger日志配置
+  logger:
+    enable: true
+    level: INFO
+    file:
+      enable: true
+      name: template.log
+      path: ./logTest
   # MetaHandler控制器
   meta-handler:
     # meta-handler是否启用
@@ -71,10 +79,6 @@ template:
     configuration:
       # 缓存类型：redis or local，默认使用本地缓存
       type: local
-  # logger日志配置
-  logger:
-    enable: enable
-    level: DEBUG
 
 
 
