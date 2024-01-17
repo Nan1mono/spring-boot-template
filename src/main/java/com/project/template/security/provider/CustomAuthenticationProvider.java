@@ -12,7 +12,7 @@ import com.project.template.model.entity.User;
 import com.project.template.security.entity.SecurityRoleMenu;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.entity.SecurityUserRole;
-import com.project.template.security.enums.LoginFailEnum;
+import com.project.template.security.enums.AuthFailEnum;
 import com.project.template.security.exception.LoginException;
 import com.project.template.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
@@ -120,7 +120,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         if (pwdExpirationTime != null) {
             boolean before = pwdExpirationTime.isBefore(LocalDateTime.now());
             if (!before) {
-                throw new LoginException(LoginFailEnum.PASSWORD_EXPIRATION);
+                throw new LoginException(AuthFailEnum.PASSWORD_EXPIRATION);
             }
         }
     }
@@ -153,7 +153,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 匹配密码
         if (!presentedPassword.equals(securityUserDetail.getPassword())) {
             this.countPassErrorTimes(isCheckLock, securityUserDetail.getUser());
-            throw new LoginException(LoginFailEnum.PASSWORD_ERROR);
+            throw new LoginException(AuthFailEnum.PASSWORD_ERROR);
         }
         // 校验其他规则
         this.additionalAuthenticationChecks(securityUserDetail, (UsernamePasswordAuthenticationToken) authentication);

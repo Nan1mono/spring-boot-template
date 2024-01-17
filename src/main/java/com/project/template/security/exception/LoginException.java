@@ -1,6 +1,6 @@
 package com.project.template.security.exception;
 
-import com.project.template.security.enums.LoginFailEnum;
+import com.project.template.security.enums.AuthFailEnum;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -18,9 +18,9 @@ public class LoginException extends RuntimeException {
         this.code = code;
     }
 
-    public LoginException(LoginFailEnum loginFailEnum) {
-        super(loginFailEnum.getMessage());
-        this.code = loginFailEnum.getCode();
+    public LoginException(AuthFailEnum authFailEnum) {
+        super(authFailEnum.getMessage());
+        this.code = authFailEnum.getCode();
     }
 
 

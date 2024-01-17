@@ -5,7 +5,7 @@ import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
 import com.project.template.security.entity.SecurityUserDetail;
-import com.project.template.security.enums.LoginFailEnum;
+import com.project.template.security.enums.AuthFailEnum;
 import com.project.template.security.provider.CustomAuthenticationProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -56,22 +56,22 @@ public class PermissionFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
         // 验证token是否存在
         if (StringUtils.isBlank(token)) {
-            throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
+            throw new BadCredentialsException(AuthFailEnum.LOGIN_AUTH.getMessage());
         }
         token = token.replace("Bearer ", "");
         Object userId = JwtHelper.getUserId(token);
         if (userId == null) {
-            throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
+            throw new BadCredentialsException(AuthFailEnum.LOGIN_AUTH.getMessage());
         }
         // 验证缓存token
         Object value = cacheTemplate.getIfPresent(SecurityUserDetail.getUserCacheKey(userId));
         if (value == null) {
-            throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
+            throw new BadCredentialsException(AuthFailEnum.LOGIN_AUTH.getMessage());
         }
         SecurityUserDetail userDetail = (SecurityUserDetail) value;
         // 验证token是否匹配
         if (!userDetail.getToken().equals(token)) {
-            throw new BadCredentialsException(LoginFailEnum.LOGIN_EXPIRATION.getMessage());
+            throw new BadCredentialsException(AuthFailEnum.LOGIN_EXPIRATION.getMessage());
         }
         // 验证用户是否被锁定
         if (userDetail.getUser().getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {

@@ -1,6 +1,6 @@
 package com.project.template.common.cache.exception;
 
-import com.project.template.security.enums.LoginFailEnum;
+import com.project.template.security.enums.AuthFailEnum;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -18,9 +18,9 @@ public class CacheException extends RuntimeException {
         this.code = code;
     }
 
-    public CacheException(LoginFailEnum loginFailEnum) {
-        super(loginFailEnum.getMessage());
-        this.code = loginFailEnum.getCode();
+    public CacheException(AuthFailEnum authFailEnum) {
+        super(authFailEnum.getMessage());
+        this.code = authFailEnum.getCode();
     }
 
 }

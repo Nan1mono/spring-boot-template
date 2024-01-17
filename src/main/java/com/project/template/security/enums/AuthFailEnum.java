@@ -3,7 +3,7 @@ package com.project.template.security.enums;
 import lombok.Getter;
 
 @Getter
-public enum LoginFailEnum {
+public enum AuthFailEnum {
 
     PASSWORD_ERROR(201, "账号或密码错误"),
     PASSWORD_EXPIRATION(201, "账号密码已过期，请修改密码"),
@@ -16,7 +16,7 @@ public enum LoginFailEnum {
     private final Integer code;
     private final String message;
 
-    LoginFailEnum(Integer code, String message) {
+    AuthFailEnum(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
