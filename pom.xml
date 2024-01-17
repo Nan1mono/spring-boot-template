@@ -17,7 +17,7 @@
 
     <!-- 环境控制 -->
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.5</mybatis-plus-generator.version>
         <velocity-engine.version>2.3</velocity-engine.version>

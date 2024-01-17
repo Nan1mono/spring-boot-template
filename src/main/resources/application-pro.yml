@@ -14,13 +14,6 @@ spring:
       url: jdbc:mysql://localhost:3307/test2?useSSL=false&serverTimezone=UTC
       username: root
       password: 123456
-      
-  mail:
-    username: 1174752357@qq.com
-    password: qxpnolhjayulhhif
-    host: smtp.qq.com
-    default-encoding: UTF-8
-    port: 587
     
   config:
     activate:
