@@ -6,19 +6,19 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class LoginException extends RuntimeException {
+public class AuthException extends RuntimeException {
 
     /**
      * 错误码
      */
     private final Integer code;
 
-    public LoginException(String message, Integer code) {
+    public AuthException(String message, Integer code) {
         super(message);
         this.code = code;
     }
 
-    public LoginException(AuthFailEnum authFailEnum) {
+    public AuthException(AuthFailEnum authFailEnum) {
         super(authFailEnum.getMessage());
         this.code = authFailEnum.getCode();
     }

@@ -2,7 +2,7 @@ package com.project.template.controller;
 
 import com.project.template.common.result.Result;
 import com.project.template.security.enums.AuthFailEnum;
-import com.project.template.security.exception.LoginException;
+import com.project.template.security.exception.AuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class LoginController {
         try {
             bCryptPasswordEncoder.upgradeEncoding(password);
         } catch (Exception e) {
-            throw new LoginException(AuthFailEnum.PASSWORD_ERROR);
+            throw new AuthException(AuthFailEnum.PASSWORD_ERROR);
         }
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(username, password);

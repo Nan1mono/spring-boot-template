@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.project.template.security.exception.LoginException;
+import com.project.template.security.exception.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -109,7 +109,7 @@ public class JwtHelper {
             decode = JWT.decode(token);
         } catch (JWTDecodeException | TokenExpiredException exception) {
             // 用于校验token合法性以及token是否过期
-            throw new LoginException(FETCH_USERINFO_ERROR);
+            throw new AuthException(FETCH_USERINFO_ERROR);
         }
         return decode.getClaims();
     }

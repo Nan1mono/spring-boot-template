@@ -13,7 +13,7 @@ import com.project.template.security.entity.SecurityRoleMenu;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.entity.SecurityUserRole;
 import com.project.template.security.enums.AuthFailEnum;
-import com.project.template.security.exception.LoginException;
+import com.project.template.security.exception.AuthException;
 import com.project.template.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,14 +113,14 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                         .update();
                 cacheTemplate.remove(this.getUserErrorPassLockNumKey(user.getId()));
             } else {
-                throw new LoginException(lockMsg(lockDatetime), 400);
+                throw new AuthException(lockMsg(lockDatetime), 400);
             }
         }
         // 如果时间存在，则代表存在过期时间
         if (pwdExpirationTime != null) {
             boolean before = pwdExpirationTime.isBefore(LocalDateTime.now());
             if (!before) {
-                throw new LoginException(AuthFailEnum.PASSWORD_EXPIRATION);
+                throw new AuthException(AuthFailEnum.PASSWORD_EXPIRATION);
             }
         }
     }
@@ -153,7 +153,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 匹配密码
         if (!presentedPassword.equals(securityUserDetail.getPassword())) {
             this.countPassErrorTimes(isCheckLock, securityUserDetail.getUser());
-            throw new LoginException(AuthFailEnum.PASSWORD_ERROR);
+            throw new AuthException(AuthFailEnum.PASSWORD_ERROR);
         }
         // 校验其他规则
         this.additionalAuthenticationChecks(securityUserDetail, (UsernamePasswordAuthenticationToken) authentication);
@@ -222,7 +222,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         }
         // 如果账号已经锁定，则不需要在进行锁定检查了
         if (user.getIsLocked().equals(UserStatusEnum.LOCKED.getCode())) {
-            throw new LoginException(lockMsg(user.getLockDatetime()), 400);
+            throw new AuthException(lockMsg(user.getLockDatetime()), 400);
         }
         String userErrorPassLockNumKey = this.getUserErrorPassLockNumKey(user.getId());
         // 获取登录错误计数
