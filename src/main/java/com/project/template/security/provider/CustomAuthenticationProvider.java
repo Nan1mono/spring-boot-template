@@ -248,14 +248,12 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     }
 
     private String getUserErrorPassLockNumKey(Long userId) {
-        return "user:error-pass:error-num:" + userId;
+        return String.format("user:error-pass:error-num:%s", userId);
     }
 
     public static String lockMsg(LocalDateTime lockDatetime) {
         return lockDatetime == null ?
                 "您的账户已被永久锁定，如果疑问请联系管理员" :
-                "您的账号被锁定至 "
-                        + lockDatetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                        + "，如果有疑问请联系管理员";
+                String.format("您的账号被锁定至 %s，如果有疑问请联系管理员", lockDatetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 }
