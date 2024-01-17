@@ -1,0 +1,48 @@
+<configuration>
+
+    <!-- 开启日志 -->
+    <springProperty scope="context" name="loggerEnable" source="template.logger.enable"/>
+    <!-- 定义日志级别 -->
+    <springProperty scope="context" name="loggerLevel" source="template.logger.level"/>
+    <if condition='property("loggerEnable").equals("false")'>
+        <then>
+            <root level="OFF">
+                <appender-ref ref="STDOUT" />
+            </root>
+        </then>
+        <else>
+            <root level="INFO">
+                <appender-ref ref="STDOUT" />
+            </root>
+        </else>
+    </if>
+
+    <if condition='property("loggerEnable").equals("INFO") || property("loggerEnable") == null'>
+        <then>
+            <root level="INFO">
+                <appender-ref ref="STDOUT" />
+            </root>
+        </then>
+    </if>
+    <if condition='property("loggerEnable").equals("DEBUG")'>
+        <then>
+            <root level="DEBUG">
+                <appender-ref ref="STDOUT" />
+            </root>
+        </then>
+    </if>
+    <if condition='property("loggerEnable").equals("WARN")'>
+        <then>
+            <root level="WARN">
+                <appender-ref ref="STDOUT" />
+            </root>
+        </then>
+    </if>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+</configuration>

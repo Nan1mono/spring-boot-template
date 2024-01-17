@@ -38,23 +38,6 @@ knife4j:
 #  api-docs:
 #    enabled: true
 
-logging:
-  # 日志级别
-  level:
-    root: info
-  file:
-    # 日志文件名格式
-    name: ./logs/template.log
-  logback:
-    rollingpolicy:
-      # 根据文件大小归档，超过2KB自动归档，次日启动服务时也会自动归档
-      file-name-pattern: ./logs/%d{yyyyMMdd}/cmhn.out.log.%d{yyyy-MM-dd}.%i.gz
-      # 最大日志文件大小(默认为10MB，这里为了测试归档，暂时设置为2KB)
-      max-file-size: 100MB
-      # 要保留的日志备份的总大小(默认为0B)
-      total-size-cap: 1GB
-      # 保存存档日志文件的最大天数(默认为7天)
-      max-history: 20
 
 template:
   # MetaHandler控制器
@@ -88,6 +71,12 @@ template:
     configuration:
       # 缓存类型：redis or local，默认使用本地缓存
       type: local
+  # logger日志配置
+  logger:
+    enable: enable
+    level: DEBUG
+
+
 
 
 
