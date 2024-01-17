@@ -87,7 +87,7 @@ template:
   cache:
     configuration:
       # 缓存类型：redis or local，默认使用本地缓存
-      type: redis
+      type: local
 
 
 
