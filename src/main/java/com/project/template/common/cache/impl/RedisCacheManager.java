@@ -1,7 +1,7 @@
 package com.project.template.common.cache.impl;
 
 import com.alibaba.fastjson2.JSON;
-import com.project.template.common.cache.CacheTemplateManager;
+import com.project.template.common.cache.CacheTemplate;
 import com.project.template.common.util.RedisUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.ObjectUtils;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RedisCacheManager extends CacheTemplateManager {
+public class RedisCacheManager extends CacheTemplate {
 
     private final RedisUtils redisUtils;
 

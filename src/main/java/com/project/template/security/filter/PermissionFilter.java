@@ -1,5 +1,6 @@
 package com.project.template.security.filter;
 
+import com.project.template.common.cache.CacheTemplate;
 import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
@@ -32,7 +33,7 @@ public class PermissionFilter extends OncePerRequestFilter {
     @Value("${template.security.allow.uri}")
     private List<String> uri;
 
-    private CacheTemplateManager cacheTemplateManager;
+    private final CacheTemplateManager cacheTemplateManager;
 
     private final PathMatcher matcher = new AntPathMatcher();
 
@@ -46,7 +47,7 @@ public class PermissionFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         // 初始化缓存管理器
-        cacheTemplateManager = cacheTemplateManager.createManager();
+        CacheTemplate cacheTemplate = cacheTemplateManager.createManager();
         // 路由白名单过滤
         if (request.getMethod().equals(HttpMethod.OPTIONS.name()) || uri.stream().anyMatch(t -> matcher.match(t, request.getRequestURI()))) {
             filterChain.doFilter(request, response);
@@ -63,7 +64,7 @@ public class PermissionFilter extends OncePerRequestFilter {
             throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }
         // 验证缓存token
-        Object value = cacheTemplateManager.getIfPresent(SecurityUserDetail.getUserCacheKey(userId));
+        Object value = cacheTemplate.getIfPresent(SecurityUserDetail.getUserCacheKey(userId));
         if (value == null) {
             throw new BadCredentialsException(LoginFailEnum.LOGIN_AUTH.getMessage());
         }

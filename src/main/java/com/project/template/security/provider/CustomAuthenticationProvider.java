@@ -1,5 +1,6 @@
 package com.project.template.security.provider;
 
+import com.project.template.common.cache.CacheTemplate;
 import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
@@ -27,7 +28,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 自定义密码校验流程
@@ -68,7 +68,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
     private final UserService userService;
 
-    private CacheTemplateManager cacheTemplateManager;
+    private final CacheTemplateManager cacheTemplateManager;
 
     public CustomAuthenticationProvider(UserButtonMapper userButtonMapper,
                                         UserDetailsService userDetailsService,
@@ -86,11 +86,6 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         this.cacheTemplateManager = cacheTemplateManager;
     }
 
-    public void initCacheManager() {
-        cacheTemplateManager = cacheTemplateManager.createManager();
-    }
-
-
     /**
      * 其他身份验证检查
      *
@@ -101,6 +96,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
+        CacheTemplate cacheTemplate = cacheTemplateManager.createManager();
         SecurityUserDetail securityUserDetail = (SecurityUserDetail) userDetails;
         User user = securityUserDetail.getUser();
         LocalDateTime pwdExpirationTime = user.getPwdExpirationTime();
@@ -115,7 +111,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
                         .set(User::getIsLocked, UserStatusEnum.UN_LOCKED.getCode())
                         .set(User::getLockDatetime, null)
                         .update();
-                cacheTemplateManager.remove(this.getUserErrorPassLockNumKey(user.getId()));
+                cacheTemplate.remove(this.getUserErrorPassLockNumKey(user.getId()));
             } else {
                 throw new LoginException(lockMsg(lockDatetime), 400);
             }
@@ -148,6 +144,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
      */
     @Override
     public Authentication authenticate(Authentication authentication) {
+        CacheTemplate cacheTemplate = cacheTemplateManager.createManager();
         // 获取登录时暗文密码
         String presentedPassword = authentication.getCredentials().toString();
         String username = authentication.getPrincipal() == null ? "NONE_PROVIDED" : authentication.getName();
@@ -169,8 +166,8 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 检索用户对应的角色集合
         findUserRole(securityUserDetail);
         // 用户登录信息添加至本地缓存
-        cacheTemplateManager.remove(SecurityUserDetail.getUserCacheKey(securityUserDetail.getUser().getId()));
-        cacheTemplateManager.put(SecurityUserDetail.getUserCacheKey(securityUserDetail.getUser().getId()), securityUserDetail);
+        cacheTemplate.remove(SecurityUserDetail.getUserCacheKey(securityUserDetail.getUser().getId()));
+        cacheTemplate.put(SecurityUserDetail.getUserCacheKey(securityUserDetail.getUser().getId()), securityUserDetail);
         UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken
                 .authenticated(securityUserDetail,
                         securityUserDetail.getUser().getPassword(), securityUserDetail.getAuthorities());
@@ -205,7 +202,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         List<Long> roleIdList = userRoleList.stream()
                 .map(SecurityUserRole::getRoleId)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
         securityUserDetail.setRoleMenuList(findUserMenu(roleIdList));
         securityUserDetail.setAuthorities(findUserPermission(roleIdList));
     }
@@ -219,6 +216,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
     }
 
     private void countPassErrorTimes(boolean isCheck, User user) {
+        CacheTemplate cacheTemplate = cacheTemplateManager.createManager();
         if (!isCheck) {
             return;
         }
@@ -228,7 +226,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         }
         String userErrorPassLockNumKey = this.getUserErrorPassLockNumKey(user.getId());
         // 获取登录错误计数
-        Object lockNumObject = cacheTemplateManager.getIfPresent(userErrorPassLockNumKey);
+        Object lockNumObject = cacheTemplate.getIfPresent(userErrorPassLockNumKey);
         int lockCount = 0;
         if (ObjectUtils.isNotEmpty(lockNumObject)) {
             lockCount = Integer.parseInt(lockNumObject.toString());
@@ -236,7 +234,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         // 判断是否已达设定的上限，如果未达上限，仅需增加试错次数
         if (lockCount < times) {
             lockCount += 1;
-            cacheTemplateManager.put(userErrorPassLockNumKey, lockCount);
+            cacheTemplate.put(userErrorPassLockNumKey, lockCount);
             return;
         }
         // 如果已达上限则需要更新用户信息，包括数据库信息

@@ -33,7 +33,7 @@ mybatis-plus:
 knife4j:
   enable: true
   production: false
-#
+
 #springdoc:
 #  api-docs:
 #    enabled: true
@@ -74,7 +74,7 @@ template:
     button-enable: true
     # 路由白名单配置
     allow:
-      uri: /v3/api-docs/**,/swagger-ui/**,/test/**,/doc.html,/login/auth
+      uri: /v3/api-docs/**,/swagger-ui/**,/test/**,/doc.html,/login/auth,/**/*.css,/**/*.js,/favicon.ico
   # 密码试错设定
   pass-error:
     # 是否开启试错限制

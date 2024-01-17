@@ -1,16 +1,15 @@
 package com.project.template.common.util;
 
 import com.project.template.common.cache.exception.CacheException;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -18,12 +17,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisUtils {
 
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
-    public RedisUtils(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * **************** common start ****************
@@ -194,10 +189,13 @@ public class RedisUtils {
     public void batchSetOrExpire(Map<String, String> map, Long seconds) {
         RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         redisTemplate.executePipelined((RedisCallback<String>) connection -> {
-            map.forEach((key, value) -> connection.set(Objects.requireNonNull(serializer.serialize(key)),
-                    Objects.requireNonNull(serializer.serialize(value)),
-                    Expiration.seconds(seconds),
-                    RedisStringCommands.SetOption.UPSERT));
+            map.forEach((key, value) -> {
+                byte[] keyBytes = Objects.requireNonNull(serializer.serialize(key));
+                byte[] valueBytes = Objects.requireNonNull(serializer.serialize(value));
+
+                // 使用opsForValue().set替代set方法
+                redisTemplate.opsForValue().set(Arrays.toString(keyBytes), valueBytes, Duration.ofSeconds(seconds));
+            });
             return null;
         }, serializer);
     }
