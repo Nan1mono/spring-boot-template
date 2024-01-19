@@ -47,7 +47,7 @@
 
         <dependency>
             <groupId>com.project.template</groupId>
-            <artifactId>logger-starter</artifactId>
+            <artifactId>logger-mongo-starter</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -148,12 +148,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>${alibaba-easyexcel.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.21</version>
         </dependency>
 
         <dependency>
