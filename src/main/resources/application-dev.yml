@@ -2,6 +2,7 @@ server:
   port: 8250
 
 spring:
+
   # 数据库配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -13,12 +14,17 @@ spring:
   config:
     activate:
       on-profile: dev
-  # redis
   data:
+    # redis
     redis:
       password: 123456
       port: 6379
       host: 192.168.66.120
+    # mongodb
+    mongodb:
+      host: 192.168.66.130
+      port: 27017
+      database: template
 
 
 mybatis-plus:
@@ -57,6 +63,9 @@ template:
       history: 30
       # 归档压缩大小限制(default:10MB)
       size: 30MB
+    mongo:
+      enable: true
+      body: false
   # MetaHandler控制器
   meta-handler:
     # meta-handler是否启用
