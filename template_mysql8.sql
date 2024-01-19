@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 192.168.66.130
+ Source Server         : mysql-192.168.66.130
  Source Server Type    : MySQL
- Source Server Version : 80032 (8.0.32)
- Source Host           : 192.168.66.130:3307
+ Source Server Version : 80031 (8.0.31)
+ Source Host           : 192.168.66.130:3306
  Source Schema         : template_mysql8
 
  Target Server Type    : MySQL
- Target Server Version : 80032 (8.0.32)
+ Target Server Version : 80031 (8.0.31)
  File Encoding         : 65001
 
- Date: 28/09/2023 03:10:29
+ Date: 19/01/2024 23:04:15
 */
 
 SET NAMES utf8mb4;
@@ -229,6 +229,8 @@ CREATE TABLE `sys_user`  (
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
   `pwd_expiration_time` datetime NULL DEFAULT NULL COMMENT '密码到期时间 空代表永不过期',
   `status` int NOT NULL DEFAULT 1 COMMENT '状态 1启用 0停用',
+  `is_locked` int NULL DEFAULT 0 COMMENT '是否被锁定 0未锁定 1锁定',
+  `lock_datetime` datetime NULL DEFAULT NULL COMMENT '账号锁定到期时间，空代表永久锁定',
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '删除标志 0未删除 1删除',
   `update_by` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '修改人',
   `update_on` datetime NULL DEFAULT NULL COMMENT '修改时间',
@@ -240,24 +242,24 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'lee', 'lee', '2000-04-19', 'admin', '$2a$10$A6D78JEKYB3OSiCRUTRS0eDfuzg6las3PtTffdART2LJLbG2IMnIy', NULL, 1, 0, NULL, '2023-09-22 09:38:38', NULL, '2023-09-22 09:38:38');
-INSERT INTO `sys_user` VALUES (2, 'lin', 'lin', '2000-04-19', 'adminlin', '123456', NULL, 1, 0, NULL, '2023-09-22 17:47:25', NULL, '2023-09-22 17:47:27');
-INSERT INTO `sys_user` VALUES (3, 'jolin', 'jolin', '2000-04-19', 'adminjolin', '123456', NULL, 1, 0, NULL, '2023-09-22 17:47:52', NULL, '2023-09-22 17:47:54');
-INSERT INTO `sys_user` VALUES (4, 'Koon Ching Wan', 'Koon Ching Wan', '2021-01-03', 'Koon Ching Wan', 'ZItOLKIjc9', NULL, 1, 0, 'vTP8Aj6mND', '2019-10-06 05:30:48', 'vTP8Aj6mND', '2013-06-17 18:46:41');
-INSERT INTO `sys_user` VALUES (5, 'Chin Ming', 'Chin Ming', '2000-04-19', 'Chin Ming', 'Wb3xX6YYLt', NULL, 1, 0, 'XUlOjDBIel', '2011-03-14 08:20:37', 'XUlOjDBIel', '2017-02-23 03:17:12');
-INSERT INTO `sys_user` VALUES (6, 'Takeda Daichi', 'Takeda Daichi', '2008-10-06', 'Takeda Daichi', 'VQ7h2vNxNX', NULL, 1, 0, 'j6MvL5ZtIq', '2015-06-01 16:18:12', 'j6MvL5ZtIq', '2009-01-28 00:40:54');
-INSERT INTO `sys_user` VALUES (7, 'Kato Takuya', 'Kato Takuya', '2017-03-19', 'Kato Takuya', '5aIiVpuuqW', NULL, 1, 0, 'qloP4jUSeO', '2021-10-26 05:32:03', 'qloP4jUSeO', '2000-08-26 14:07:35');
-INSERT INTO `sys_user` VALUES (8, 'Luis Ramos', 'Luis Ramos', '2011-02-14', 'Luis Ramos', 'KvTqhgmxYS', NULL, 1, 0, 'iOInHQf7ZI', '2023-01-08 19:23:55', 'iOInHQf7ZI', '2004-03-27 22:37:31');
-INSERT INTO `sys_user` VALUES (9, 'Maeda Mai', 'Maeda Mai', '2010-08-06', 'Maeda Mai', 'CIODgorM0e', NULL, 1, 0, 'woNbHb0fsX', '2004-05-27 16:23:59', 'woNbHb0fsX', '2003-10-15 03:35:41');
-INSERT INTO `sys_user` VALUES (10, 'Lei Zitao', 'Lei Zitao', '2002-09-19', 'Lei Zitao', 'WqRB9vUr8s', NULL, 1, 0, '9wvHFPpuWg', '2017-06-21 06:17:43', '9wvHFPpuWg', '2005-12-01 19:54:29');
-INSERT INTO `sys_user` VALUES (11, 'Debbie Butler', 'Debbie Butler', '2020-12-29', 'Debbie Butler', '8iEfbElXKD', NULL, 1, 0, '4x71EWUfeM', '2019-07-29 18:16:43', '4x71EWUfeM', '2002-03-17 05:38:00');
-INSERT INTO `sys_user` VALUES (12, 'Nishimura Ayano', 'Nishimura Ayano', '2005-02-18', 'Nishimura Ayano', '6DUJL7Sw49', NULL, 1, 0, 'qoNqJnjwSn', '2007-09-22 23:29:47', 'qoNqJnjwSn', '2022-12-15 02:58:40');
-INSERT INTO `sys_user` VALUES (13, 'Ikeda Misaki', 'Ikeda Misaki', '2002-04-15', 'Ikeda Misaki', 'XEs0jmMdHv', NULL, 1, 0, 'hgyQ0tZXTL', '2003-02-03 20:44:20', 'hgyQ0tZXTL', '2005-02-07 09:35:26');
-INSERT INTO `sys_user` VALUES (14, 'Carmen Davis', 'Carmen Davis', '2017-11-06', 'Carmen Davis', 'Gad6QOqSk4', NULL, 1, 0, '2ZVBgA0skD', '2000-02-09 06:18:34', '2ZVBgA0skD', '2021-02-13 06:04:23');
-INSERT INTO `sys_user` VALUES (15, 'Matsumoto Minato', 'Matsumoto Minato', '2004-06-18', 'Matsumoto Minato', 'LbRHUmgkWk', NULL, 1, 0, 'rbZYRWvXcf', '2010-07-30 07:56:03', 'rbZYRWvXcf', '2004-07-16 05:30:46');
-INSERT INTO `sys_user` VALUES (16, 'Tian Jialun', 'Tian Jialun', '2002-11-24', 'Tian Jialun', 'xPQqOQ6Kxb', NULL, 1, 0, 'KCMzWbYQfL', '2008-10-11 16:00:52', 'KCMzWbYQfL', '2022-11-01 17:21:40');
-INSERT INTO `sys_user` VALUES (17, 'Leroy Jenkins', 'Leroy Jenkins', '2014-02-20', 'Leroy Jenkins', 'aVUdgm3nHZ', NULL, 1, 0, '2E2pVp46ef', '2005-09-07 17:07:49', '2E2pVp46ef', '2017-04-05 13:06:33');
-INSERT INTO `sys_user` VALUES (18, 'Hirano Takuya', 'Hirano Takuya', '2018-04-09', 'Hirano Takuya', 'soVeKTxl2v', NULL, 1, 0, 'OTwgpDMnFP', '2022-07-31 00:52:53', 'OTwgpDMnFP', '2014-11-17 04:47:22');
+INSERT INTO `sys_user` VALUES (1, 'lee', 'lee', '2000-04-19', 'admin', '$2a$10$A6D78JEKYB3OSiCRUTRS0eDfuzg6las3PtTffdART2LJLbG2IMnIy', NULL, 1, 0, NULL, 0, NULL, '2023-09-22 09:38:38', NULL, '2023-09-22 09:38:38');
+INSERT INTO `sys_user` VALUES (2, 'lin', 'lin', '2000-04-19', 'adminlin', '123456', NULL, 1, 0, NULL, 0, NULL, '2023-09-22 17:47:25', NULL, '2023-09-22 17:47:27');
+INSERT INTO `sys_user` VALUES (3, 'jolin', 'jolin', '2000-04-19', 'adminjolin', '123456', NULL, 1, 0, NULL, 0, NULL, '2023-09-22 17:47:52', NULL, '2023-09-22 17:47:54');
+INSERT INTO `sys_user` VALUES (4, 'Koon Ching Wan', 'Koon Ching Wan', '2021-01-03', 'Koon Ching Wan', 'ZItOLKIjc9', NULL, 1, 0, NULL, 0, 'vTP8Aj6mND', '2019-10-06 05:30:48', 'vTP8Aj6mND', '2013-06-17 18:46:41');
+INSERT INTO `sys_user` VALUES (5, 'Chin Ming', 'Chin Ming', '2000-04-19', 'Chin Ming', 'Wb3xX6YYLt', NULL, 1, 0, NULL, 0, 'XUlOjDBIel', '2011-03-14 08:20:37', 'XUlOjDBIel', '2017-02-23 03:17:12');
+INSERT INTO `sys_user` VALUES (6, 'Takeda Daichi', 'Takeda Daichi', '2008-10-06', 'Takeda Daichi', 'VQ7h2vNxNX', NULL, 1, 0, NULL, 0, 'j6MvL5ZtIq', '2015-06-01 16:18:12', 'j6MvL5ZtIq', '2009-01-28 00:40:54');
+INSERT INTO `sys_user` VALUES (7, 'Kato Takuya', 'Kato Takuya', '2017-03-19', 'Kato Takuya', '5aIiVpuuqW', NULL, 1, 0, NULL, 0, 'qloP4jUSeO', '2021-10-26 05:32:03', 'qloP4jUSeO', '2000-08-26 14:07:35');
+INSERT INTO `sys_user` VALUES (8, 'Luis Ramos', 'Luis Ramos', '2011-02-14', 'Luis Ramos', 'KvTqhgmxYS', NULL, 1, 0, NULL, 0, 'iOInHQf7ZI', '2023-01-08 19:23:55', 'iOInHQf7ZI', '2004-03-27 22:37:31');
+INSERT INTO `sys_user` VALUES (9, 'Maeda Mai', 'Maeda Mai', '2010-08-06', 'Maeda Mai', 'CIODgorM0e', NULL, 1, 0, NULL, 0, 'woNbHb0fsX', '2004-05-27 16:23:59', 'woNbHb0fsX', '2003-10-15 03:35:41');
+INSERT INTO `sys_user` VALUES (10, 'Lei Zitao', 'Lei Zitao', '2002-09-19', 'Lei Zitao', 'WqRB9vUr8s', NULL, 1, 0, NULL, 0, '9wvHFPpuWg', '2017-06-21 06:17:43', '9wvHFPpuWg', '2005-12-01 19:54:29');
+INSERT INTO `sys_user` VALUES (11, 'Debbie Butler', 'Debbie Butler', '2020-12-29', 'Debbie Butler', '8iEfbElXKD', NULL, 1, 0, NULL, 0, '4x71EWUfeM', '2019-07-29 18:16:43', '4x71EWUfeM', '2002-03-17 05:38:00');
+INSERT INTO `sys_user` VALUES (12, 'Nishimura Ayano', 'Nishimura Ayano', '2005-02-18', 'Nishimura Ayano', '6DUJL7Sw49', NULL, 1, 0, NULL, 0, 'qoNqJnjwSn', '2007-09-22 23:29:47', 'qoNqJnjwSn', '2022-12-15 02:58:40');
+INSERT INTO `sys_user` VALUES (13, 'Ikeda Misaki', 'Ikeda Misaki', '2002-04-15', 'Ikeda Misaki', 'XEs0jmMdHv', NULL, 1, 0, NULL, 0, 'hgyQ0tZXTL', '2003-02-03 20:44:20', 'hgyQ0tZXTL', '2005-02-07 09:35:26');
+INSERT INTO `sys_user` VALUES (14, 'Carmen Davis', 'Carmen Davis', '2017-11-06', 'Carmen Davis', 'Gad6QOqSk4', NULL, 1, 0, NULL, 0, '2ZVBgA0skD', '2000-02-09 06:18:34', '2ZVBgA0skD', '2021-02-13 06:04:23');
+INSERT INTO `sys_user` VALUES (15, 'Matsumoto Minato', 'Matsumoto Minato', '2004-06-18', 'Matsumoto Minato', 'LbRHUmgkWk', NULL, 1, 0, NULL, 0, 'rbZYRWvXcf', '2010-07-30 07:56:03', 'rbZYRWvXcf', '2004-07-16 05:30:46');
+INSERT INTO `sys_user` VALUES (16, 'Tian Jialun', 'Tian Jialun', '2002-11-24', 'Tian Jialun', 'xPQqOQ6Kxb', NULL, 1, 0, NULL, 0, 'KCMzWbYQfL', '2008-10-11 16:00:52', 'KCMzWbYQfL', '2022-11-01 17:21:40');
+INSERT INTO `sys_user` VALUES (17, 'Leroy Jenkins', 'Leroy Jenkins', '2014-02-20', 'Leroy Jenkins', 'aVUdgm3nHZ', NULL, 1, 0, NULL, 0, '2E2pVp46ef', '2005-09-07 17:07:49', '2E2pVp46ef', '2017-04-05 13:06:33');
+INSERT INTO `sys_user` VALUES (18, 'Hirano Takuya', 'Hirano Takuya', '2018-04-09', 'Hirano Takuya', 'soVeKTxl2v', NULL, 1, 0, NULL, 0, 'OTwgpDMnFP', '2022-07-31 00:52:53', 'OTwgpDMnFP', '2014-11-17 04:47:22');
 
 -- ----------------------------
 -- Table structure for sys_user_button
