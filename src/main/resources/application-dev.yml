@@ -42,12 +42,21 @@ knife4j:
 template:
   # logger日志配置
   logger:
+    # 是否开启日志(default:true)
     enable: true
+    # 日志等级(default:INFO)
     level: INFO
     file:
+      # 是否开启日志文件存储(default:false)
       enable: true
+      # 日志文件名称(default:info.log)
       name: template.log
-      path: ./logTest
+      # 日志文件路径(default:./log)
+      path: ./log
+      # 存储天数(default:30)
+      history: 30
+      # 归档压缩大小限制(default:10MB)
+      size: 30MB
   # MetaHandler控制器
   meta-handler:
     # meta-handler是否启用

@@ -45,13 +45,17 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-spring-boot3-starter -->
+        <dependency>
+            <groupId>com.project.template</groupId>
+            <artifactId>logger-starter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -59,7 +63,6 @@
             <version>${mybatis-plus-generator.version}</version>
         </dependency>
 
-        <!-- vm模板引擎依赖 -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
@@ -176,7 +179,6 @@
             <artifactId>janino</artifactId>
             <version>3.1.11</version>
         </dependency>
-
     </dependencies>
 
 
