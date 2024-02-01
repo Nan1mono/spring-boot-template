@@ -47,7 +47,7 @@
 
         <dependency>
             <groupId>com.project.template</groupId>
-            <artifactId>logger-mongo-starter</artifactId>
+            <artifactId>logger-jpa-starter</artifactId>
             <version>1.0</version>
         </dependency>
 

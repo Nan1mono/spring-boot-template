@@ -10,6 +10,10 @@ spring:
     url: jdbc:mysql://192.168.66.130:3306/template_mysql8?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
     username: root
     password: 123456
+  # spring data jpa自动创建表配置
+  jpa:
+    hibernate:
+      ddl-auto: update
   # 配置中心
   config:
     activate:
@@ -63,9 +67,14 @@ template:
       history: 30
       # 归档压缩大小限制(default:10MB)
       size: 30MB
+    # 开启mongo日志记录
     mongo:
       enable: true
       body: false
+    # 开启数据库日志记录
+    jpa:
+      enable: true
+      body: true
   # MetaHandler控制器
   meta-handler:
     # meta-handler是否启用
