@@ -75,6 +75,7 @@ template:
     jpa:
       enable: true
       body: true
+      excluded: /login/auth
   # MetaHandler控制器
   meta-handler:
     # meta-handler是否启用
