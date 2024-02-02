@@ -67,15 +67,20 @@ template:
       history: 30
       # 归档压缩大小限制(default:10MB)
       size: 30MB
-    # 开启mongo日志记录
+    # 添加日志记录排除路径
+    excluded: /login/auth
+    # mongo日志记录相关配置
     mongo:
+      # 是否开启mongo记录
       enable: true
+      # 是否开启mongo记录的requestBody和responseBody
       body: false
-    # 开启数据库日志记录
+    # 数据库日志记录相关配置
     jpa:
+      # 是否开启数据库记录
       enable: true
+      # 是否开启数据库记录的requestBody和responseBody
       body: true
-      excluded: /login/auth
   # MetaHandler控制器
   meta-handler:
     # meta-handler是否启用
