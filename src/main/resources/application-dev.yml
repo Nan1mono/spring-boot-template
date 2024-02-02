@@ -67,50 +67,50 @@ template:
       history: 30
       # 归档压缩大小限制(default:10MB)
       size: 30MB
-    # 添加日志记录排除路径
+    # 添加日志记录排除路径(default:null)
     excluded:
     # mongo日志记录相关配置
     mongo:
-      # 是否开启mongo记录
+      # 是否开启mongo记录(default:true)
       enable: true
-      # 是否开启mongo记录的requestBody和responseBody
+      # 是否开启mongo记录的requestBody和responseBody(default:false)
       body: false
     # 数据库日志记录相关配置
     jpa:
-      # 是否开启数据库记录
+      # 是否开启数据库记录(default:true)
       enable: true
-      # 是否开启数据库记录的requestBody和responseBody
+      # 是否开启数据库记录的requestBody和responseBody(default:false)
       body: true
   # MetaHandler控制器
   meta-handler:
-    # meta-handler是否启用
+    # meta-handler是否启用(default:true)
     enable: true
-    # 插入字段
+    # 插入字段(default:user_id)
     column: user_id
   # token配置
   token:
-    # 加密盐配置
+    # 加密盐配置(default:nan1mono)
     sign-key: nan1mono
-    # 过期时间配置(秒)
+    # 过期时间配置(秒)(default:25200)
     expiration: 86400
   security:
-    # 是否开启按钮查询权限
+    # 是否开启按钮查询权限(default:true)
     button-enable: true
-    # 路由白名单配置
+    # 路由白名单配置(default:null)
     allow:
       uri: /v3/api-docs/**,/swagger-ui/**,/test/**,/doc.html,/login/auth,/**/*.css,/**/*.js,/favicon.ico
   # 密码试错设定
   pass-error:
-    # 是否开启试错限制
+    # 是否开启试错限制(default:false)
     enable: true
-    # 试错次数
+    # 试错次数(default:5)
     times: 10
-    # 试错上限锁定时间（分钟）
+    # 试错上限锁定时间（分钟）(default:15)
     lock-minute: 10
   # 缓存设置
   cache:
     configuration:
-      # 缓存类型：redis or local，默认使用本地缓存
+      # 缓存类型：redis or local，默认使用本地缓存(default:local)
       type: local
 
 
