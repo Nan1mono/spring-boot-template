@@ -47,7 +47,19 @@
 
         <dependency>
             <groupId>com.project.template</groupId>
+            <artifactId>logger-starter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.project.template</groupId>
             <artifactId>logger-jpa-starter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.project.template</groupId>
+            <artifactId>logger-mongo-starter</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -138,10 +150,10 @@
         </dependency>
 
         <!-- mongodb场景 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-mongodb</artifactId>-->
+<!--        </dependency>-->
 
         <!-- excel工具 -->
         <dependency>

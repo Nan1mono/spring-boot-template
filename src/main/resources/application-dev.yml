@@ -68,7 +68,7 @@ template:
       # 归档压缩大小限制(default:10MB)
       size: 30MB
     # 添加日志记录排除路径
-    excluded: /login/auth
+    excluded:
     # mongo日志记录相关配置
     mongo:
       # 是否开启mongo记录
