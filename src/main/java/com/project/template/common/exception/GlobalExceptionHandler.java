@@ -22,14 +22,14 @@ public class GlobalExceptionHandler {
 
     /**
      * 拦截所有自定义异常
-     * @param myException 自定义异常
+     * @param tempBusinessException 自定义异常
      * @return Result<Void> 统一异常信息
      */
-    @ExceptionHandler(MyException.class)
-    public Result<Void> error(MyException myException){
-        log.error(myException.getMessage());
-        Integer code = myException.getCode();
-        String message = myException.getMessage();
+    @ExceptionHandler(TempBusinessException.class)
+    public Result<Void> error(TempBusinessException tempBusinessException){
+        log.error(tempBusinessException.getMessage());
+        Integer code = tempBusinessException.getCode();
+        String message = tempBusinessException.getMessage();
         return Result.fail(code, message);
     }
 }

@@ -3,7 +3,7 @@ package com.project.template.common.helper;
 import com.alibaba.fastjson2.JSON;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.project.template.common.exception.MyException;
+import com.project.template.common.exception.TempBusinessException;
 import com.project.template.common.result.ResultCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -46,7 +46,7 @@ public class LocalCacheHelper {
      */
     public static void put(Object key, Object value) {
         if (ObjectUtils.isEmpty(key)) {
-            throw new MyException(ResultCodeEnum.DATA_ERROR);
+            throw new TempBusinessException(ResultCodeEnum.DATA_ERROR);
         }
         cache.put(key, value);
     }
@@ -59,7 +59,7 @@ public class LocalCacheHelper {
      */
     public static void putJSONStr(Object key, Object value) {
         if (ObjectUtils.isEmpty(key)) {
-            throw new MyException(ResultCodeEnum.DATA_ERROR);
+            throw new TempBusinessException(ResultCodeEnum.DATA_ERROR);
         }
         cache.put(key, JSON.toJSONString(value));
     }
@@ -72,13 +72,13 @@ public class LocalCacheHelper {
      */
     public static Object get(Object key) {
         if (ObjectUtils.isEmpty(key)) {
-            throw new MyException(ResultCodeEnum.DATA_ERROR);
+            throw new TempBusinessException(ResultCodeEnum.DATA_ERROR);
         }
         try {
             return cache.get(key, () -> "");
         } catch (ExecutionException e) {
             log.warn(e.getLocalizedMessage());
-            throw new MyException(ResultCodeEnum.DATA_ERROR);
+            throw new TempBusinessException(ResultCodeEnum.DATA_ERROR);
         }
     }
 

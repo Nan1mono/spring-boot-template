@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Getter
 @Slf4j
-public class MyException extends RuntimeException {
+public class TempBusinessException extends RuntimeException {
 
     private final Integer code;
 
@@ -20,7 +20,7 @@ public class MyException extends RuntimeException {
      * @param message   exception message
      * @param code      exception code
      */
-    public MyException(String message, Integer code) {
+    public TempBusinessException(String message, Integer code) {
         super(message);
         this.code = code;
     }
@@ -29,12 +29,12 @@ public class MyException extends RuntimeException {
      * 接收枚举类型对象
      * @param resultCodeEnum exceptionCodeEnum
      */
-    public MyException(ResultCodeEnum resultCodeEnum) {
+    public TempBusinessException(ResultCodeEnum resultCodeEnum) {
         super(resultCodeEnum.getMessage());
         this.code = resultCodeEnum.getCode();
     }
 
-    public MyException(Exception e) {
+    public TempBusinessException(Exception e) {
         super(e.getMessage());
         this.code = 201;
     }
