@@ -1,0 +1,20 @@
+package com.project.template.module.system.service.impl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.project.template.module.system.mapper.UserMapper;
+import com.project.template.module.system.model.entity.User;
+import com.project.template.module.system.service.UserService;
+import org.springframework.stereotype.Service;
+
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author lee
+ * @since 2023-09-22
+ */
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+}
