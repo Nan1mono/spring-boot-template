@@ -3,10 +3,13 @@ package com.project.template;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.project.template.model.base.entity.BaseEntity;
+import com.project.template.module.base.entity.BaseEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
 
 /**
  * 代码生成器

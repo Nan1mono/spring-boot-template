@@ -4,17 +4,18 @@ import com.project.template.common.cache.CacheTemplate;
 import com.project.template.common.cache.CacheTemplateManager;
 import com.project.template.common.constant.UserStatusEnum;
 import com.project.template.common.helper.JwtHelper;
-import com.project.template.mapper.RoleMenuMapper;
-import com.project.template.mapper.RolePermissionMapper;
-import com.project.template.mapper.UserButtonMapper;
-import com.project.template.mapper.UserRoleMapper;
-import com.project.template.model.entity.User;
+import com.project.template.common.util.SecurityUtils;
+import com.project.template.module.system.mapper.RoleMenuMapper;
+import com.project.template.module.system.mapper.RolePermissionMapper;
+import com.project.template.module.system.mapper.UserButtonMapper;
+import com.project.template.module.system.mapper.UserRoleMapper;
+import com.project.template.module.system.model.entity.User;
+import com.project.template.module.system.service.UserService;
 import com.project.template.security.entity.SecurityRoleMenu;
 import com.project.template.security.entity.SecurityUserDetail;
 import com.project.template.security.entity.SecurityUserRole;
 import com.project.template.security.enums.AuthFailEnum;
 import com.project.template.security.exception.AuthException;
-import com.project.template.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -151,7 +152,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
         SecurityUserDetail securityUserDetail =
                 this.retrieveUser(username, (UsernamePasswordAuthenticationToken) authentication);
         // 匹配密码
-        if (!presentedPassword.equals(securityUserDetail.getPassword())) {
+        if (!SecurityUtils.matchesPassword(presentedPassword, securityUserDetail.getPassword())) {
             this.countPassErrorTimes(isCheckLock, securityUserDetail.getUser());
             throw new AuthException(AuthFailEnum.PASSWORD_ERROR);
         }

@@ -1,7 +1,7 @@
 package com.project.template.security.entity;
 
 import com.project.template.common.constant.UserStatusEnum;
-import com.project.template.model.entity.User;
+import com.project.template.module.system.model.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
