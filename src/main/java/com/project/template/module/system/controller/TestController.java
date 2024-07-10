@@ -38,6 +38,13 @@ public class TestController {
         return Result.ok();
     }
 
+    @GetMapping("/quartz/save")
+    @Operation(summary = "添加定时任务")
+    public Result<Void> saveQuartz(String className, String functionName, String cron, Integer isConcurrency) {
+        scheduleActionTemplate.add(className, functionName, cron, 1, isConcurrency);
+        return Result.ok();
+    }
+
     @GetMapping("/quartz/pause")
     @Operation(summary = "暂停定时任务")
     public Result<Void> quartzDelete(@RequestParam Long id) {
