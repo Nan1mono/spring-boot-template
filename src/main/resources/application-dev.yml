@@ -40,13 +40,9 @@ mybatis-plus:
       logic-delete-field: is_deleted
       logic-delete-value: 1
 
-knife4j:
-  enable: true
-  production: false
-
-#springdoc:
-#  api-docs:
-#    enabled: true
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 
 template:
