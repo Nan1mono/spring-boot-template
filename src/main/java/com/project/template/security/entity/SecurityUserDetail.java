@@ -17,7 +17,7 @@ public class SecurityUserDetail implements UserDetails {
 
     @Getter
     @Setter
-    private final User user;
+    private User user;
 
     @Setter
     @Getter
