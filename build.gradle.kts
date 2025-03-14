@@ -5,6 +5,13 @@
 plugins {
     `java-library`
     `maven-publish`
+    id("io.spring.dependency-management") version "1.1.7"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:3.4.3")
+    }
 }
 
 repositories {
@@ -26,7 +33,7 @@ dependencies {
     implementation(libs.com.baomidou.mybatis.plus.generator)
     implementation(libs.org.apache.velocity.velocity.engine.core)
     implementation(libs.org.projectlombok.lombok)
-    implementation(libs.mysql.mysql.connector.java)
+    implementation(libs.mysql.mysql.connector.j)
     implementation(libs.com.alibaba.druid.spring.boot.starter)
     implementation(libs.org.springframework.boot.spring.boot.starter.aop)
     implementation(libs.org.springframework.boot.spring.boot.configuration.processor)
@@ -48,7 +55,7 @@ dependencies {
 group = "com.project.template"
 version = "1.0-SNAPSHOT"
 description = "template"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 publishing {
     publications.create<MavenPublication>("maven") {
